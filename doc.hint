@@ -1,0 +1,7 @@
+category: Graphics Doc
+external-source: tiff
+sdesc: "TIFF image library (API documentation)"
+ldesc: "Included in this software distribution is a library, libtiff, for
+reading and writing TIFF images, a small collection of tools for doing
+simple manipulations of TIFF images on UNIX systems, and documentation
+on the library and tools."
