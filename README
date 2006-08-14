@@ -7,7 +7,7 @@ on the library and tools.
 
 Runtime requirements:
 (* required only by tiffgt)
-  cygwin-1.5.20-1
+  cygwin-1.5.21-1
   * libGL1-6.5-1
   * libglut3-2.4.0-1
   libjpeg62-6b-11
@@ -15,16 +15,16 @@ Runtime requirements:
 
 Build requirements:
 (besides corresponding -devel packages)
-  cygwin-1.5.20-1
+  cygwin-1.5.21-1
   autoconf2.5-2.59-2
   automake1.9-1.9.6-1
-  binutils-20050610-1
-  cygport-0.2.2-1
+  binutils-20060709-1
+  cygport-0.2.5-1
   gawk-3.1.5-2
   gcc-core-3.4.4-1
   gcc-g++-3.4.4-1
   libtool1.5-1.5.22-1
-  make-3.80-1
+  make-3.81-1
   sed-4.1.5-1
 
 Canonical website:
@@ -297,6 +297,10 @@ Files included in the documentation package:
 ------------------
 
 Port Notes:
+
+----- version 3.8.2-1 -----
+Fixes security issues CVE-2006-3459 through -3465.  Patch from Google 
+Security team in Gentoo Bugzilla #142383.
 
 ----- version 3.8.2-1 -----
 Unofficial version bump; last official release was 3.7.3-1 by Charles

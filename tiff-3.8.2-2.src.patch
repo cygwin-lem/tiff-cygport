@@ -1,0 +1,2310 @@
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/configure.ac src/tiff-3.8.2/configure.ac
+--- origsrc/tiff-3.8.2/configure.ac	2006-03-23 08:36:40.000000000 -0600
++++ src/tiff-3.8.2/configure.ac	2006-08-13 18:08:28.521250000 -0500
+@@ -55,6 +55,9 @@
+     openbsd* | mirbsd*)
+ 	LIBTIFF_VERSION_INFO=$LIBTIFF_MAJOR_VERSION$LIBTIFF_MINOR_VERSION:$LIBTIFF_MICRO_VERSION$LIBTIFF_ALPHA_VERSION:0
+ 	;;
++    cygwin*)
++	LIBTIFF_VERSION_INFO=`expr $LIBTIFF_MAJOR_VERSION + 2`:$LIBTIFF_MINOR_VERSION:$LIBTIFF_MICRO_VERSION$LIBTIFF_ALPHA_VERSION
++	;;
+     *)
+ 	LIBTIFF_VERSION_INFO=$LIBTIFF_MAJOR_VERSION:$LIBTIFF_MINOR_VERSION:$LIBTIFF_MICRO_VERSION$LIBTIFF_ALPHA_VERSION
+ 	;;
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/Makefile.am src/tiff-3.8.2/libtiff/Makefile.am
+--- origsrc/tiff-3.8.2/libtiff/Makefile.am	2006-03-23 08:31:53.000000000 -0600
++++ src/tiff-3.8.2/libtiff/Makefile.am	2006-08-13 18:06:06.146250000 -0500
+@@ -121,7 +121,7 @@
+ if HAVE_RPATH
+ libtiffxx_la_LDFLAGS += $(LIBDIR)
+ endif
+-libtiffxx_la_LIBADD = $(LIBTIFF) $(LIBPORT)
++libtiffxx_la_LIBADD = $(LIBTIFF)
+ libtiffxx_la_DEPENDENCIES = libtiff.la
+ 
+ #
+@@ -133,6 +133,6 @@
+ mkg3states_SOURCES = mkg3states.c tif_fax3.h
+ mkg3states_LDADD = $(LIBPORT)
+ 
+-faxtable: mkg3states
++faxtable: mkg3states$(EXEEXT)
+ 	(rm -f tif_fax3sm.c && ./mkg3states -b -c const tif_fax3sm.c)
+ 
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_config.h.in src/tiff-3.8.2/libtiff/tif_config.h.in
+--- origsrc/tiff-3.8.2/libtiff/tif_config.h.in	2006-01-23 12:22:32.000000000 -0600
++++ src/tiff-3.8.2/libtiff/tif_config.h.in	2006-08-13 18:06:06.177500000 -0500
+@@ -149,10 +149,6 @@
+ /* Support LogLuv high dynamic range encoding */
+ #undef LOGLUV_SUPPORT
+ 
+-/* Define to the sub-directory in which libtool stores uninstalled libraries.
+-   */
+-#undef LT_OBJDIR
+-
+ /* Support LZW algorithm */
+ #undef LZW_SUPPORT
+ 
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_dir.c src/tiff-3.8.2/libtiff/tif_dir.c
+--- origsrc/tiff-3.8.2/libtiff/tif_dir.c	2006-03-21 10:42:50.000000000 -0600
++++ src/tiff-3.8.2/libtiff/tif_dir.c	2006-08-13 18:06:57.833750000 -0500
+@@ -122,6 +122,7 @@
+ {
+ 	static const char module[] = "_TIFFVSetField";
+ 	
++	const TIFFFieldInfo* fip = _TIFFFindFieldInfo(tif, tag, TIFF_ANY);
+ 	TIFFDirectory* td = &tif->tif_dir;
+ 	int status = 1;
+ 	uint32 v32, i, v;
+@@ -195,10 +196,12 @@
+ 		break;
+ 	case TIFFTAG_ORIENTATION:
+ 		v = va_arg(ap, uint32);
++		const TIFFFieldInfo* fip;
+ 		if (v < ORIENTATION_TOPLEFT || ORIENTATION_LEFTBOT < v) {
++			fip = _TIFFFieldWithTag(tif, tag);
+ 			TIFFWarningExt(tif->tif_clientdata, tif->tif_name,
+ 			    "Bad value %lu for \"%s\" tag ignored",
+-			    v, _TIFFFieldWithTag(tif, tag)->field_name);
++			    v, fip ? fip->field_name : "Unknown");
+ 		} else
+ 			td->td_orientation = (uint16) v;
+ 		break;
+@@ -387,11 +390,15 @@
+ 	     * happens, for example, when tiffcp is used to convert between
+ 	     * compression schemes and codec-specific tags are blindly copied.
+              */
++	    /* 
++	     * better not dereference fip if it is NULL.
++	     * -- taviso@google.com 15 Jun 2006
++	     */
+             if(fip == NULL || fip->field_bit != FIELD_CUSTOM) {
+ 		TIFFErrorExt(tif->tif_clientdata, module,
+ 		    "%s: Invalid %stag \"%s\" (not supported by codec)",
+ 		    tif->tif_name, isPseudoTag(tag) ? "pseudo-" : "",
+-		    _TIFFFieldWithTag(tif, tag)->field_name);
++		    fip ? fip->field_name : "Unknown");
+ 		status = 0;
+ 		break;
+             }
+@@ -468,7 +475,7 @@
+ 	    if (fip->field_type == TIFF_ASCII)
+ 		    _TIFFsetString((char **)&tv->value, va_arg(ap, char *));
+ 	    else {
+-                tv->value = _TIFFmalloc(tv_size * tv->count);
++                tv->value = _TIFFCheckMalloc(tif, tv_size, tv->count, "Tag Value");
+ 		if (!tv->value) {
+ 		    status = 0;
+ 		    goto end;
+@@ -563,7 +570,7 @@
+           }
+ 	}
+ 	if (status) {
+-		TIFFSetFieldBit(tif, _TIFFFieldWithTag(tif, tag)->field_bit);
++		TIFFSetFieldBit(tif, fip->field_bit);
+ 		tif->tif_flags |= TIFF_DIRTYDIRECT;
+ 	}
+ 
+@@ -572,12 +579,12 @@
+ 	return (status);
+ badvalue:
+ 	TIFFErrorExt(tif->tif_clientdata, module, "%s: Bad value %d for \"%s\"",
+-		  tif->tif_name, v, _TIFFFieldWithTag(tif, tag)->field_name);
++		  tif->tif_name, v, fip ? fip->field_name : "Unknown");
+ 	va_end(ap);
+ 	return (0);
+ badvalue32:
+ 	TIFFErrorExt(tif->tif_clientdata, module, "%s: Bad value %ld for \"%s\"",
+-		   tif->tif_name, v32, _TIFFFieldWithTag(tif, tag)->field_name);
++		   tif->tif_name, v32, fip ? fip->field_name : "Unknown");
+ 	va_end(ap);
+ 	return (0);
+ }
+@@ -813,12 +820,16 @@
+              * If the client tries to get a tag that is not valid
+              * for the image's codec then we'll arrive here.
+              */
++	    /*
++	     * dont dereference fip if it's NULL.
++	     * -- taviso@google.com 15 Jun 2006
++	     */
+             if( fip == NULL || fip->field_bit != FIELD_CUSTOM )
+             {
+ 				TIFFErrorExt(tif->tif_clientdata, "_TIFFVGetField",
+                           "%s: Invalid %stag \"%s\" (not supported by codec)",
+                           tif->tif_name, isPseudoTag(tag) ? "pseudo-" : "",
+-                          _TIFFFieldWithTag(tif, tag)->field_name);
++                          fip ? fip->field_name : "Unknown");
+                 ret_val = 0;
+                 break;
+             }
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_dirinfo.c src/tiff-3.8.2/libtiff/tif_dirinfo.c
+--- origsrc/tiff-3.8.2/libtiff/tif_dirinfo.c	2006-02-07 07:51:03.000000000 -0600
++++ src/tiff-3.8.2/libtiff/tif_dirinfo.c	2006-08-13 18:06:57.849375000 -0500
+@@ -775,7 +775,8 @@
+ 		TIFFErrorExt(tif->tif_clientdata, "TIFFFieldWithTag",
+ 			  "Internal error, unknown tag 0x%x",
+                           (unsigned int) tag);
+-		assert(fip != NULL);
++		/* assert(fip != NULL); */
++
+ 		/*NOTREACHED*/
+ 	}
+ 	return (fip);
+@@ -789,7 +790,8 @@
+ 	if (!fip) {
+ 		TIFFErrorExt(tif->tif_clientdata, "TIFFFieldWithName",
+ 			  "Internal error, unknown tag %s", field_name);
+-		assert(fip != NULL);
++		/* assert(fip != NULL); */
++		
+ 		/*NOTREACHED*/
+ 	}
+ 	return (fip);
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_dirread.c src/tiff-3.8.2/libtiff/tif_dirread.c
+--- origsrc/tiff-3.8.2/libtiff/tif_dirread.c	2006-03-21 10:42:50.000000000 -0600
++++ src/tiff-3.8.2/libtiff/tif_dirread.c	2006-08-13 18:06:57.880625000 -0500
+@@ -29,6 +29,9 @@
+  *
+  * Directory Read Support Routines.
+  */
++
++#include <limits.h>
++
+ #include "tiffiop.h"
+ 
+ #define	IGNORE	0		/* tag placeholder used below */
+@@ -81,6 +84,7 @@
+ 	uint16 dircount;
+ 	toff_t nextdiroff;
+ 	int diroutoforderwarning = 0;
++	int compressionknown = 0;
+ 	toff_t* new_dirlist;
+ 
+ 	tif->tif_diroff = tif->tif_nextdiroff;
+@@ -147,13 +151,20 @@
+ 	} else {
+ 		toff_t off = tif->tif_diroff;
+ 
+-		if (off + sizeof (uint16) > tif->tif_size) {
+-			TIFFErrorExt(tif->tif_clientdata, module,
+-			    "%s: Can not read TIFF directory count",
+-                            tif->tif_name);
+-			return (0);
++		/*
++		 * Check for integer overflow when validating the dir_off, otherwise
++		 * a very high offset may cause an OOB read and crash the client.
++		 * -- taviso@google.com, 14 Jun 2006.
++		 */
++		if (off + sizeof (uint16) > tif->tif_size || 
++			off > (UINT_MAX - sizeof(uint16))) {
++				TIFFErrorExt(tif->tif_clientdata, module,
++				    "%s: Can not read TIFF directory count",
++				    tif->tif_name);
++				return (0);
+ 		} else
+-			_TIFFmemcpy(&dircount, tif->tif_base + off, sizeof (uint16));
++			_TIFFmemcpy(&dircount, tif->tif_base + off,
++					sizeof (uint16));
+ 		off += sizeof (uint16);
+ 		if (tif->tif_flags & TIFF_SWAB)
+ 			TIFFSwabShort(&dircount);
+@@ -254,6 +265,7 @@
+ 		while (fix < tif->tif_nfields &&
+ 		       tif->tif_fieldinfo[fix]->field_tag < dp->tdir_tag)
+ 			fix++;
++
+ 		if (fix >= tif->tif_nfields ||
+ 		    tif->tif_fieldinfo[fix]->field_tag != dp->tdir_tag) {
+ 
+@@ -264,17 +276,23 @@
+ 						       dp->tdir_tag,
+ 						       dp->tdir_tag,
+ 						       dp->tdir_type);
+-
+-                    TIFFMergeFieldInfo(tif,
+-                                       _TIFFCreateAnonFieldInfo(tif,
+-						dp->tdir_tag,
+-						(TIFFDataType) dp->tdir_type),
+-				       1 );
++					/*
++					 * creating anonymous fields prior to knowing the compression
++					 * algorithm (ie, when the field info has been merged) could cause
++					 * crashes with pathological directories.
++					 * -- taviso@google.com 15 Jun 2006
++					 */
++					if (compressionknown)
++			                    TIFFMergeFieldInfo(tif, _TIFFCreateAnonFieldInfo(tif, dp->tdir_tag, 
++						(TIFFDataType) dp->tdir_type), 1 );
++					else goto ignore;
++		    
+                     fix = 0;
+                     while (fix < tif->tif_nfields &&
+                            tif->tif_fieldinfo[fix]->field_tag < dp->tdir_tag)
+ 			fix++;
+ 		}
++		
+ 		/*
+ 		 * Null out old tags that we ignore.
+ 		 */
+@@ -326,6 +344,7 @@
+ 				    dp->tdir_type, dp->tdir_offset);
+ 				if (!TIFFSetField(tif, dp->tdir_tag, (uint16)v))
+ 					goto bad;
++				else compressionknown++;
+ 				break;
+ 			/* XXX: workaround for broken TIFFs */
+ 			} else if (dp->tdir_type == TIFF_LONG) {
+@@ -540,6 +559,7 @@
+ 	 * Attempt to deal with a missing StripByteCounts tag.
+ 	 */
+ 	if (!TIFFFieldSet(tif, FIELD_STRIPBYTECOUNTS)) {
++		const TIFFFieldInfo* fip = _TIFFFieldWithTag(tif, TIFFTAG_STRIPBYTECOUNTS);
+ 		/*
+ 		 * Some manufacturers violate the spec by not giving
+ 		 * the size of the strips.  In this case, assume there
+@@ -556,7 +576,7 @@
+ 			"%s: TIFF directory is missing required "
+ 			"\"%s\" field, calculating from imagelength",
+ 			tif->tif_name,
+-		        _TIFFFieldWithTag(tif,TIFFTAG_STRIPBYTECOUNTS)->field_name);
++		        fip ? fip->field_name : "Unknown");
+ 		if (EstimateStripByteCounts(tif, dir, dircount) < 0)
+ 		    goto bad;
+ /* 
+@@ -580,6 +600,7 @@
+ 	} else if (td->td_nstrips == 1 
+                    && td->td_stripoffset[0] != 0 
+                    && BYTECOUNTLOOKSBAD) {
++		const TIFFFieldInfo* fip = _TIFFFieldWithTag(tif, TIFFTAG_STRIPBYTECOUNTS);
+ 		/*
+ 		 * XXX: Plexus (and others) sometimes give a value of zero for
+ 		 * a tag when they don't know what the correct value is!  Try
+@@ -589,13 +610,14 @@
+ 		TIFFWarningExt(tif->tif_clientdata, module,
+ 	"%s: Bogus \"%s\" field, ignoring and calculating from imagelength",
+                             tif->tif_name,
+-		            _TIFFFieldWithTag(tif,TIFFTAG_STRIPBYTECOUNTS)->field_name);
++		            fip ? fip->field_name : "Unknown");
+ 		if(EstimateStripByteCounts(tif, dir, dircount) < 0)
+ 		    goto bad;
+ 	} else if (td->td_planarconfig == PLANARCONFIG_CONTIG
+ 		   && td->td_nstrips > 2
+ 		   && td->td_compression == COMPRESSION_NONE
+ 		   && td->td_stripbytecount[0] != td->td_stripbytecount[1]) {
++		const TIFFFieldInfo* fip = _TIFFFieldWithTag(tif, TIFFTAG_STRIPBYTECOUNTS);
+ 		/*
+ 		 * XXX: Some vendors fill StripByteCount array with absolutely
+ 		 * wrong values (it can be equal to StripOffset array, for
+@@ -604,7 +626,7 @@
+ 		TIFFWarningExt(tif->tif_clientdata, module,
+ 	"%s: Wrong \"%s\" field, ignoring and calculating from imagelength",
+                             tif->tif_name,
+-		            _TIFFFieldWithTag(tif,TIFFTAG_STRIPBYTECOUNTS)->field_name);
++		            fip ? fip->field_name : "Unknown");
+ 		if (EstimateStripByteCounts(tif, dir, dircount) < 0)
+ 		    goto bad;
+ 	}
+@@ -870,7 +892,13 @@
+ 
+ 	register TIFFDirEntry *dp;
+ 	register TIFFDirectory *td = &tif->tif_dir;
+-	uint16 i;
++	
++	/* i is used to iterate over td->td_nstrips, so must be
++	 * at least the same width.
++	 * -- taviso@google.com 15 Jun 2006
++	 */
++
++	uint32 i;
+ 
+ 	if (td->td_stripbytecount)
+ 		_TIFFfree(td->td_stripbytecount);
+@@ -947,16 +975,18 @@
+ static int
+ CheckDirCount(TIFF* tif, TIFFDirEntry* dir, uint32 count)
+ {
++	const TIFFFieldInfo* fip = _TIFFFieldWithTag(tif, dir->tdir_tag);
++
+ 	if (count > dir->tdir_count) {
+ 		TIFFWarningExt(tif->tif_clientdata, tif->tif_name,
+ 	"incorrect count for field \"%s\" (%lu, expecting %lu); tag ignored",
+-		    _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name,
++		    fip ? fip->field_name : "Unknown",
+ 		    dir->tdir_count, count);
+ 		return (0);
+ 	} else if (count < dir->tdir_count) {
+ 		TIFFWarningExt(tif->tif_clientdata, tif->tif_name,
+ 	"incorrect count for field \"%s\" (%lu, expecting %lu); tag trimmed",
+-		    _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name,
++		    fip ? fip->field_name : "Unknown",
+ 		    dir->tdir_count, count);
+ 		return (1);
+ 	}
+@@ -970,6 +1000,7 @@
+ TIFFFetchData(TIFF* tif, TIFFDirEntry* dir, char* cp)
+ {
+ 	int w = TIFFDataWidth((TIFFDataType) dir->tdir_type);
++	const TIFFFieldInfo* fip = _TIFFFieldWithTag(tif, dir->tdir_tag);
+ 	tsize_t cc = dir->tdir_count * w;
+ 
+ 	/* Check for overflow. */
+@@ -1013,7 +1044,7 @@
+ bad:
+ 	TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
+ 		     "Error fetching data for field \"%s\"",
+-		     _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name);
++		     fip ? fip->field_name : "Unknown");
+ 	return (tsize_t) 0;
+ }
+ 
+@@ -1039,10 +1070,12 @@
+ static int
+ cvtRational(TIFF* tif, TIFFDirEntry* dir, uint32 num, uint32 denom, float* rv)
+ {
++	const TIFFFieldInfo* fip;
+ 	if (denom == 0) {
++		fip = _TIFFFieldWithTag(tif, dir->tdir_tag);
+ 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
+ 		    "%s: Rational with zero denominator (num = %lu)",
+-		    _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name, num);
++		    fip ? fip->field_name : "Unknown", num);
+ 		return (0);
+ 	} else {
+ 		if (dir->tdir_type == TIFF_RATIONAL)
+@@ -1159,6 +1192,20 @@
+ static int
+ TIFFFetchShortPair(TIFF* tif, TIFFDirEntry* dir)
+ {
++	/*
++	 * Prevent overflowing the v stack arrays below by performing a sanity
++	 * check on tdir_count, this should never be greater than two.
++	 * -- taviso@google.com 14 Jun 2006.
++	 */
++	if (dir->tdir_count > 2) {
++		const TIFFFieldInfo* fip = _TIFFFieldWithTag(tif, dir->tdir_tag);
++		TIFFWarningExt(tif->tif_clientdata, tif->tif_name,
++				"unexpected count for field \"%s\", %lu, expected 2; ignored.",
++				fip ? fip->field_name : "Unknown",
++				dir->tdir_count);
++		return 0;
++	}
++
+ 	switch (dir->tdir_type) {
+ 		case TIFF_BYTE:
+ 		case TIFF_SBYTE:
+@@ -1329,14 +1376,15 @@
+ 	case TIFF_DOUBLE:
+ 		return (TIFFFetchDoubleArray(tif, dir, (double*) v));
+ 	default:
++		{ const TIFFFieldInfo* fip = _TIFFFieldWithTag(tif, dir->tdir_tag);
+ 		/* TIFF_NOTYPE */
+ 		/* TIFF_ASCII */
+ 		/* TIFF_UNDEFINED */
+ 		TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
+ 			     "cannot read TIFF_ANY type %d for field \"%s\"",
+ 			     dir->tdir_type,
+-			     _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name);
+-		return (0);
++			     fip ? fip->field_name : "Unknown");
++		return (0); }
+ 	}
+ 	return (1);
+ }
+@@ -1351,6 +1399,9 @@
+ 	int ok = 0;
+ 	const TIFFFieldInfo* fip = _TIFFFieldWithTag(tif, dp->tdir_tag);
+ 
++	if (fip == NULL) {
++		return (0);
++	}
+ 	if (dp->tdir_count > 1) {		/* array of values */
+ 		char* cp = NULL;
+ 
+@@ -1493,6 +1544,7 @@
+ TIFFFetchPerSampleShorts(TIFF* tif, TIFFDirEntry* dir, uint16* pl)
+ {
+     uint16 samples = tif->tif_dir.td_samplesperpixel;
++    const TIFFFieldInfo* fip;
+     int status = 0;
+ 
+     if (CheckDirCount(tif, dir, (uint32) samples)) {
+@@ -1510,9 +1562,10 @@
+ 
+             for (i = 1; i < check_count; i++)
+                 if (v[i] != v[0]) {
++				fip = _TIFFFieldWithTag(tif, dir->tdir_tag);
+ 					TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
+                               "Cannot handle different per-sample values for field \"%s\"",
+-                              _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name);
++                              fip ? fip->field_name : "Unknown");
+                     goto bad;
+                 }
+             *pl = v[0];
+@@ -1534,6 +1587,7 @@
+ TIFFFetchPerSampleLongs(TIFF* tif, TIFFDirEntry* dir, uint32* pl)
+ {
+     uint16 samples = tif->tif_dir.td_samplesperpixel;
++    const TIFFFieldInfo* fip;
+     int status = 0;
+ 
+     if (CheckDirCount(tif, dir, (uint32) samples)) {
+@@ -1551,9 +1605,10 @@
+                 check_count = samples;
+             for (i = 1; i < check_count; i++)
+                 if (v[i] != v[0]) {
++				fip = _TIFFFieldWithTag(tif, dir->tdir_tag);
+ 					TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
+                               "Cannot handle different per-sample values for field \"%s\"",
+-                              _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name);
++                              fip ? fip->field_name : "Unknown");
+                     goto bad;
+                 }
+             *pl = v[0];
+@@ -1574,6 +1629,7 @@
+ TIFFFetchPerSampleAnys(TIFF* tif, TIFFDirEntry* dir, double* pl)
+ {
+     uint16 samples = tif->tif_dir.td_samplesperpixel;
++    const TIFFFieldInfo* fip;
+     int status = 0;
+ 
+     if (CheckDirCount(tif, dir, (uint32) samples)) {
+@@ -1591,9 +1647,10 @@
+ 
+             for (i = 1; i < check_count; i++)
+                 if (v[i] != v[0]) {
++		    fip = _TIFFFieldWithTag(tif, dir->tdir_tag);
+                     TIFFErrorExt(tif->tif_clientdata, tif->tif_name,
+                               "Cannot handle different per-sample values for field \"%s\"",
+-                              _TIFFFieldWithTag(tif, dir->tdir_tag)->field_name);
++                              fip ? fip->field_name : "Unknown");
+                     goto bad;
+                 }
+             *pl = v[0];
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_fax3.c src/tiff-3.8.2/libtiff/tif_fax3.c
+--- origsrc/tiff-3.8.2/libtiff/tif_fax3.c	2006-03-21 10:42:50.000000000 -0600
++++ src/tiff-3.8.2/libtiff/tif_fax3.c	2006-08-13 18:06:57.896250000 -0500
+@@ -1136,6 +1136,7 @@
+ Fax3VSetField(TIFF* tif, ttag_t tag, va_list ap)
+ {
+ 	Fax3BaseState* sp = Fax3State(tif);
++	const TIFFFieldInfo* fip;
+ 
+ 	assert(sp != 0);
+ 	assert(sp->vsetparent != 0);
+@@ -1181,7 +1182,13 @@
+ 	default:
+ 		return (*sp->vsetparent)(tif, tag, ap);
+ 	}
+-	TIFFSetFieldBit(tif, _TIFFFieldWithTag(tif, tag)->field_bit);
++	
++	if ((fip = _TIFFFieldWithTag(tif, tag))) {
++		TIFFSetFieldBit(tif, fip->field_bit);
++	} else {
++		return (0);
++	}
++
+ 	tif->tif_flags |= TIFF_DIRTYDIRECT;
+ 	return (1);
+ }
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_jpeg.c src/tiff-3.8.2/libtiff/tif_jpeg.c
+--- origsrc/tiff-3.8.2/libtiff/tif_jpeg.c	2006-03-21 10:42:50.000000000 -0600
++++ src/tiff-3.8.2/libtiff/tif_jpeg.c	2006-08-13 18:06:57.911875000 -0500
+@@ -722,15 +722,31 @@
+ 		segment_width = TIFFhowmany(segment_width, sp->h_sampling);
+ 		segment_height = TIFFhowmany(segment_height, sp->v_sampling);
+ 	}
+-	if (sp->cinfo.d.image_width != segment_width ||
+-	    sp->cinfo.d.image_height != segment_height) {
++	if (sp->cinfo.d.image_width < segment_width ||
++	    sp->cinfo.d.image_height < segment_height) {
+ 		TIFFWarningExt(tif->tif_clientdata, module,
+                  "Improper JPEG strip/tile size, expected %dx%d, got %dx%d",
+                           segment_width, 
+                           segment_height,
+                           sp->cinfo.d.image_width, 
+                           sp->cinfo.d.image_height);
++	} 
++	
++	if (sp->cinfo.d.image_width > segment_width ||
++			sp->cinfo.d.image_height > segment_height) {
++		/*
++		 * This case could be dangerous, if the strip or tile size has been
++		 * reported as less than the amount of data jpeg will return, some
++		 * potential security issues arise. Catch this case and error out.
++		 * -- taviso@google.com 14 Jun 2006
++		 */
++		TIFFErrorExt(tif->tif_clientdata, module, 
++			"JPEG strip/tile size exceeds expected dimensions,"
++			"expected %dx%d, got %dx%d", segment_width, segment_height,
++			sp->cinfo.d.image_width, sp->cinfo.d.image_height);
++		return (0);
+ 	}
++
+ 	if (sp->cinfo.d.num_components !=
+ 	    (td->td_planarconfig == PLANARCONFIG_CONTIG ?
+ 	     td->td_samplesperpixel : 1)) {
+@@ -761,6 +777,22 @@
+                                     sp->cinfo.d.comp_info[0].v_samp_factor,
+                                     sp->h_sampling, sp->v_sampling);
+ 
++				/*
++				 * There are potential security issues here for decoders that
++				 * have already allocated buffers based on the expected sampling
++				 * factors. Lets check the sampling factors dont exceed what
++				 * we were expecting.
++				 * -- taviso@google.com 14 June 2006
++				 */
++				if (sp->cinfo.d.comp_info[0].h_samp_factor > sp->h_sampling ||
++					sp->cinfo.d.comp_info[0].v_samp_factor > sp->v_sampling) {
++						TIFFErrorExt(tif->tif_clientdata, module,
++							"Cannot honour JPEG sampling factors that"
++							" exceed those specified.");
++						return (0);
++				}
++
++
+ 			    /*
+ 			     * XXX: Files written by the Intergraph software
+ 			     * has different sampling factors stored in the
+@@ -1521,15 +1553,18 @@
+ {
+ 	JPEGState *sp = JState(tif);
+ 	
+-	assert(sp != 0);
++	/* assert(sp != 0); */
+ 
+ 	tif->tif_tagmethods.vgetfield = sp->vgetparent;
+ 	tif->tif_tagmethods.vsetfield = sp->vsetparent;
+ 
+-	if( sp->cinfo_initialized )
+-	    TIFFjpeg_destroy(sp);	/* release libjpeg resources */
+-	if (sp->jpegtables)		/* tag value */
+-		_TIFFfree(sp->jpegtables);
++	if (sp != NULL) {
++		if( sp->cinfo_initialized )
++		    TIFFjpeg_destroy(sp);	/* release libjpeg resources */
++		if (sp->jpegtables)		/* tag value */
++			_TIFFfree(sp->jpegtables);
++	}
++
+ 	_TIFFfree(tif->tif_data);	/* release local state */
+ 	tif->tif_data = NULL;
+ 
+@@ -1541,6 +1576,7 @@
+ {
+ 	JPEGState* sp = JState(tif);
+ 	TIFFDirectory* td = &tif->tif_dir;
++	const TIFFFieldInfo* fip;
+ 	uint32 v32;
+ 
+ 	assert(sp != NULL);
+@@ -1606,7 +1642,13 @@
+ 	default:
+ 		return (*sp->vsetparent)(tif, tag, ap);
+ 	}
+-	TIFFSetFieldBit(tif, _TIFFFieldWithTag(tif, tag)->field_bit);
++
++	if ((fip = _TIFFFieldWithTag(tif, tag))) {
++		TIFFSetFieldBit(tif, fip->field_bit);
++	} else {
++		return (0);
++	}
++
+ 	tif->tif_flags |= TIFF_DIRTYDIRECT;
+ 	return (1);
+ }
+@@ -1726,7 +1768,11 @@
+ {
+ 	JPEGState* sp = JState(tif);
+ 
+-	assert(sp != NULL);
++	/* assert(sp != NULL); */
++	if (sp == NULL) {
++		TIFFWarningExt(tif->tif_clientdata, "JPEGPrintDir", "Unknown JPEGState");
++		return;
++	}
+ 
+ 	(void) flags;
+ 	if (TIFFFieldSet(tif,FIELD_JPEGTABLES))
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_next.c src/tiff-3.8.2/libtiff/tif_next.c
+--- origsrc/tiff-3.8.2/libtiff/tif_next.c	2005-12-21 06:33:56.000000000 -0600
++++ src/tiff-3.8.2/libtiff/tif_next.c	2006-08-13 18:06:57.927500000 -0500
+@@ -105,11 +105,16 @@
+ 			 * as codes of the form <color><npixels>
+ 			 * until we've filled the scanline.
+ 			 */
++			/*
++			 * Ensure the run does not exceed the scanline
++			 * bounds, potentially resulting in a security issue.
++			 * -- taviso@google.com 14 Jun 2006.
++			 */
+ 			op = row;
+ 			for (;;) {
+ 				grey = (n>>6) & 0x3;
+ 				n &= 0x3f;
+-				while (n-- > 0)
++				while (n-- > 0 && npixels < imagewidth)
+ 					SETPIXEL(op, grey);
+ 				if (npixels >= (int) imagewidth)
+ 					break;
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_pixarlog.c src/tiff-3.8.2/libtiff/tif_pixarlog.c
+--- origsrc/tiff-3.8.2/libtiff/tif_pixarlog.c	2006-03-21 10:42:50.000000000 -0600
++++ src/tiff-3.8.2/libtiff/tif_pixarlog.c	2006-08-13 18:06:57.943125000 -0500
+@@ -768,7 +768,19 @@
+ 	if (tif->tif_flags & TIFF_SWAB)
+ 		TIFFSwabArrayOfShort(up, nsamples);
+ 
+-	for (i = 0; i < nsamples; i += llen, up += llen) {
++	/* 
++	 * if llen is not an exact multiple of nsamples, the decode operation
++	 * may overflow the output buffer, so truncate it enough to prevent that
++	 * but still salvage as much data as possible.
++	 * -- taviso@google.com 14th June 2006
++	 */
++	if (nsamples % llen) 
++		TIFFWarningExt(tif->tif_clientdata, module,
++				"%s: stride %lu is not a multiple of sample count, "
++				"%lu, data truncated.", tif->tif_name, llen, nsamples);
++				
++	
++	for (i = 0; i < nsamples - (nsamples % llen); i += llen, up += llen) {
+ 		switch (sp->user_datafmt)  {
+ 		case PIXARLOGDATAFMT_FLOAT:
+ 			horizontalAccumulateF(up, llen, sp->stride,
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_read.c src/tiff-3.8.2/libtiff/tif_read.c
+--- origsrc/tiff-3.8.2/libtiff/tif_read.c	2005-12-21 06:33:56.000000000 -0600
++++ src/tiff-3.8.2/libtiff/tif_read.c	2006-08-13 18:06:57.958750000 -0500
+@@ -31,6 +31,8 @@
+ #include "tiffiop.h"
+ #include <stdio.h>
+ 
++#include <limits.h>
++
+ 	int TIFFFillStrip(TIFF*, tstrip_t);
+ 	int TIFFFillTile(TIFF*, ttile_t);
+ static	int TIFFStartStrip(TIFF*, tstrip_t);
+@@ -272,7 +274,13 @@
+ 		if ((tif->tif_flags & TIFF_MYBUFFER) && tif->tif_rawdata)
+ 			_TIFFfree(tif->tif_rawdata);
+ 		tif->tif_flags &= ~TIFF_MYBUFFER;
+-		if ( td->td_stripoffset[strip] + bytecount > tif->tif_size) {
++		/*
++		 * This sanity check could potentially overflow, causing an OOB read.
++		 * verify that offset + bytecount is > offset.
++		 * -- taviso@google.com 14 Jun 2006
++		 */
++		if ( td->td_stripoffset[strip] + bytecount > tif->tif_size ||
++			bytecount > (UINT_MAX - td->td_stripoffset[strip])) {
+ 			/*
+ 			 * This error message might seem strange, but it's
+ 			 * what would happen if a read were done instead.
+@@ -470,7 +478,13 @@
+ 		if ((tif->tif_flags & TIFF_MYBUFFER) && tif->tif_rawdata)
+ 			_TIFFfree(tif->tif_rawdata);
+ 		tif->tif_flags &= ~TIFF_MYBUFFER;
+-		if ( td->td_stripoffset[tile] + bytecount > tif->tif_size) {
++		/*
++		 * We must check this calculation doesnt overflow, potentially
++		 * causing an OOB read.
++		 * -- taviso@google.com 15 Jun 2006
++		 */
++		if (td->td_stripoffset[tile] + bytecount > tif->tif_size ||
++			bytecount > (UINT_MAX - td->td_stripoffset[tile])) {
+ 			tif->tif_curtile = NOTILE;
+ 			return (0);
+ 		}
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/tools/Makefile.am src/tiff-3.8.2/tools/Makefile.am
+--- origsrc/tiff-3.8.2/tools/Makefile.am	2006-03-23 08:31:53.000000000 -0600
++++ src/tiff-3.8.2/tools/Makefile.am	2006-08-13 18:06:06.224375000 -0500
+@@ -23,7 +23,6 @@
+ 
+ # Process this file with automake to produce Makefile.in.
+ 
+-LIBPORT = $(top_builddir)/port/libport.la
+ LIBTIFF = $(top_builddir)/libtiff/libtiff.la
+ 
+ EXTRA_DIST = Makefile.vc
+@@ -62,74 +61,74 @@
+ endif
+ 
+ bmp2tiff_SOURCES = bmp2tiff.c
+-bmp2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
++bmp2tiff_LDADD = $(LIBTIFF)
+ 
+ fax2ps_SOURCES = fax2ps.c
+-fax2ps_LDADD = $(LIBTIFF) $(LIBPORT)
++fax2ps_LDADD = $(LIBTIFF)
+ 
+ fax2tiff_SOURCES = fax2tiff.c
+-fax2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
++fax2tiff_LDADD = $(LIBTIFF)
+ 
+ gif2tiff_SOURCES = gif2tiff.c
+-gif2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
++gif2tiff_LDADD = $(LIBTIFF)
+ 
+ pal2rgb_SOURCES = pal2rgb.c
+-pal2rgb_LDADD = $(LIBTIFF) $(LIBPORT)
++pal2rgb_LDADD = $(LIBTIFF)
+ 
+ ppm2tiff_SOURCES = ppm2tiff.c
+-ppm2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
++ppm2tiff_LDADD = $(LIBTIFF)
+ 
+ ras2tiff_SOURCES = ras2tiff.c rasterfile.h
+-ras2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
++ras2tiff_LDADD = $(LIBTIFF)
+ 
+ raw2tiff_SOURCES = raw2tiff.c
+-raw2tiff_LDADD = $(LIBTIFF) $(LIBPORT)
++raw2tiff_LDADD = $(LIBTIFF)
+ 
+ rgb2ycbcr_SOURCES = rgb2ycbcr.c
+-rgb2ycbcr_LDADD = $(LIBTIFF) $(LIBPORT)
++rgb2ycbcr_LDADD = $(LIBTIFF)
+ 
+ thumbnail_SOURCES = thumbnail.c
+-thumbnail_LDADD = $(LIBTIFF) $(LIBPORT)
++thumbnail_LDADD = $(LIBTIFF)
+ 
+ tiff2bw_SOURCES = tiff2bw.c
+-tiff2bw_LDADD = $(LIBTIFF) $(LIBPORT)
++tiff2bw_LDADD = $(LIBTIFF)
+ 
+ tiff2pdf_SOURCES = tiff2pdf.c
+-tiff2pdf_LDADD = $(LIBTIFF) $(LIBPORT)
++tiff2pdf_LDADD = $(LIBTIFF)
+ 
+ tiff2ps_SOURCES = tiff2ps.c
+-tiff2ps_LDADD = $(LIBTIFF) $(LIBPORT)
++tiff2ps_LDADD = $(LIBTIFF)
+ 
+ tiff2rgba_SOURCES = tiff2rgba.c
+-tiff2rgba_LDADD = $(LIBTIFF) $(LIBPORT)
++tiff2rgba_LDADD = $(LIBTIFF)
+ 
+ tiffcmp_SOURCES = tiffcmp.c
+-tiffcmp_LDADD = $(LIBTIFF) $(LIBPORT)
++tiffcmp_LDADD = $(LIBTIFF)
+ 
+ tiffcp_SOURCES = tiffcp.c
+-tiffcp_LDADD = $(LIBTIFF) $(LIBPORT)
++tiffcp_LDADD = $(LIBTIFF)
+ 
+ tiffdither_SOURCES = tiffdither.c
+-tiffdither_LDADD = $(LIBTIFF) $(LIBPORT)
++tiffdither_LDADD = $(LIBTIFF)
+ 
+ tiffdump_SOURCES = tiffdump.c
+-tiffdump_LDADD = $(LIBTIFF) $(LIBPORT)
++tiffdump_LDADD = $(LIBTIFF)
+ 
+ tiffinfo_SOURCES = tiffinfo.c
+-tiffinfo_LDADD = $(LIBTIFF) $(LIBPORT)
++tiffinfo_LDADD = $(LIBTIFF)
+ 
+ tiffmedian_SOURCES = tiffmedian.c
+-tiffmedian_LDADD = $(LIBTIFF) $(LIBPORT)
++tiffmedian_LDADD = $(LIBTIFF)
+ 
+ tiffset_SOURCES = tiffset.c
+-tiffset_LDADD = $(LIBTIFF) $(LIBPORT)
++tiffset_LDADD = $(LIBTIFF)
+ 
+ tiffsplit_SOURCES = tiffsplit.c
+-tiffsplit_LDADD = $(LIBTIFF) $(LIBPORT)
++tiffsplit_LDADD = $(LIBTIFF)
+ 
+ tiffgt_SOURCES = tiffgt.c
+ tiffgt_CFLAGS = $(CFLAGS) $(GLUT_CFLAGS) $(AM_CFLAGS)
+-tiffgt_LDADD = $(LIBTIFF) $(LIBPORT) $(X_LIBS) $(GLUT_LIBS)
++tiffgt_LDADD = $(LIBTIFF) $(X_LIBS) $(GLUT_LIBS)
+ 
+ INCLUDES = -I$(top_srcdir)/libtiff
+ 
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/tools/tiff2pdf.c src/tiff-3.8.2/tools/tiff2pdf.c
+--- origsrc/tiff-3.8.2/tools/tiff2pdf.c	2006-03-21 10:42:51.000000000 -0600
++++ src/tiff-3.8.2/tools/tiff2pdf.c	2006-08-13 18:06:06.318125000 -0500
+@@ -38,6 +38,14 @@
+ # include <unistd.h>
+ #endif
+ 
++#ifdef HAVE_FCNTL_H
++# include <fcntl.h>
++#endif
++
++#ifdef HAVE_IO_H
++# include <io.h>
++#endif
++
+ #ifndef NULL
+ #define NULL ((void*)0)
+ #endif
+@@ -187,13 +195,13 @@
+ 	uint32 pdf_palettecs;
+ 	uint16 pdf_fitwindow;
+ 	uint32 pdf_startxref;
+-	char* pdf_fileid;
+-	char* pdf_datetime;
+-	char* pdf_creator;
+-	char* pdf_author;
+-	char* pdf_title;
+-	char* pdf_subject;
+-	char* pdf_keywords;
++	unsigned char* pdf_fileid;
++	unsigned char* pdf_datetime;
++	unsigned char* pdf_creator;
++	unsigned char* pdf_author;
++	unsigned char* pdf_title;
++	unsigned char* pdf_subject;
++	unsigned char* pdf_keywords;
+ 	t2p_cs_t pdf_colorspace;
+ 	uint16 pdf_colorspace_invert;
+ 	uint16 pdf_switchdecode;
+@@ -279,8 +287,8 @@
+ tsize_t t2p_write_pdf_header(T2P*, TIFF*);
+ tsize_t t2p_write_pdf_obj_start(uint32, TIFF*);
+ tsize_t t2p_write_pdf_obj_end(TIFF*);
+-tsize_t t2p_write_pdf_name(char*, TIFF*);
+-tsize_t t2p_write_pdf_string(char*, TIFF*);
++tsize_t t2p_write_pdf_name(unsigned char*, TIFF*);
++tsize_t t2p_write_pdf_string(unsigned char*, TIFF*);
+ tsize_t t2p_write_pdf_stream(tdata_t, tsize_t, TIFF*);
+ tsize_t t2p_write_pdf_stream_start(TIFF*);
+ tsize_t t2p_write_pdf_stream_end(TIFF*);
+@@ -385,23 +393,21 @@
+     options:
+     -o: output to file name
+ 
+-    -j  compress with JPEG (requires libjpeg configured with libtiff)
+-    -z  compress with Zip/Deflate (requires zlib configured with libtiff)
++    -j: compress with JPEG (requires libjpeg configured with libtiff)
++    -z: compress with Zip/Deflate (requires zlib configured with libtiff)
+     -q: compression quality
+-    -n  no compressed data passthrough
+-    -d  do not compress (decompress)
+-
+-	-i  invert colors
+-	
++    -n: no compressed data passthrough
++    -d: do not compress (decompress)
++    -i: invert colors
+     -u: set distance unit, 'i' for inch, 'm' for centimeter
+     -x: set x resolution default
+     -y: set y resolution default
+     -w: width in units
+     -l: length in units
+     -r: 'd' for resolution default, 'o' for resolution override
+-    -p: paper size, eg "letter", "legal", "A4"
+-    -f  set PDF "Fit Window" user preference
+-    -b set PDF "Interpolate" user preference
++    -p: paper size, eg "letter", "legal", "a4"
++    -f: set pdf "fit window" user preference
++    -b:	set PDF "Interpolate" user preference
+     -e: date, overrides image or current date/time default, YYYYMMDDHHMMSS
+     -c: creator, overrides image software default
+     -a: author, overrides image artist default
+@@ -409,7 +415,7 @@
+     -s: subject, overrides image image description default
+     -k: keywords
+ 
+-    -h  usage
++    -h: usage
+ 
+     examples:
+ 
+@@ -539,7 +545,8 @@
+ 				t2p->pdf_fitwindow=1;
+ 				break;
+ 			case 'e':
+-				t2p->pdf_datetime = (char*)_TIFFmalloc(17);
++				t2p->pdf_datetime =
++					(unsigned char*)_TIFFmalloc(17);
+ 				if(t2p->pdf_datetime==NULL){
+ 					TIFFError(TIFF2PDF_MODULE, 
+ 				"Can't allocate %u bytes of memory for main", 
+@@ -547,74 +554,78 @@
+ 					goto failfreet2p;
+ 				}
+ 				if(strlen(optarg)==0){
+-					t2p->pdf_datetime[0]=0;
++					t2p->pdf_datetime[0] = 0;
+ 				} else {
+ 					if(strlen(optarg)>14){optarg[14]=0;}
+-					t2p->pdf_datetime[0]='D';
+-					t2p->pdf_datetime[1]=':';
+-					strcpy(&(t2p->pdf_datetime[2]), optarg);
++					t2p->pdf_datetime[0] = 'D';
++					t2p->pdf_datetime[1] = ':';
++					strcpy((char *)t2p->pdf_datetime + 2,
++					       optarg);
+ 				}
+ 				break;
+ 			case 'c': 
+-				t2p->pdf_creator =
+-					(char *)_TIFFmalloc(strlen(optarg) + 1);
++				t2p->pdf_creator = (unsigned char *)
++					_TIFFmalloc(strlen(optarg) + 1);
+ 				if(t2p->pdf_creator==NULL){
+ 					TIFFError(TIFF2PDF_MODULE, 
+ 				"Can't allocate %u bytes of memory for main", 
+-						  strlen(optarg)+1); 
++						  strlen(optarg) + 1); 
+ 					goto failfreet2p;
+ 				}
+-				strcpy(t2p->pdf_creator, optarg);
+-				t2p->pdf_creator[strlen(optarg)]=0;
++				strcpy((char *)t2p->pdf_creator, optarg);
++				t2p->pdf_creator[strlen(optarg)] = 0;
+ 				break;
+ 			case 'a': 
+-				t2p->pdf_author =
+-					(char *)_TIFFmalloc(strlen(optarg) + 1);
++				t2p->pdf_author = (unsigned char *)
++					_TIFFmalloc(strlen(optarg) + 1);
+ 				if(t2p->pdf_author==NULL){
+ 					TIFFError(
+ 						TIFF2PDF_MODULE, 
+-						"Can't allocate %u bytes of memory for main", 
+-						strlen(optarg)+1); 
++				"Can't allocate %u bytes of memory for main", 
++						strlen(optarg) + 1); 
+ 					goto failfreet2p;
+ 				}
+-				strcpy(t2p->pdf_author, optarg);
++				strcpy((char *)t2p->pdf_author, optarg);
+ 				t2p->pdf_author[strlen(optarg)]=0;
+ 				break;
+ 			case 't': 
+-				t2p->pdf_title= (char*)_TIFFmalloc(strlen(optarg)+1);
++				t2p->pdf_title = (unsigned char*)
++					_TIFFmalloc(strlen(optarg)+1);
+ 				if(t2p->pdf_title==NULL){
+ 					TIFFError(
+ 						TIFF2PDF_MODULE, 
+-						"Can't allocate %u bytes of memory for main", 
+-						strlen(optarg)+1); 
++				"Can't allocate %u bytes of memory for main", 
++						strlen(optarg) + 1); 
+ 					goto failfreet2p;
+ 				}
+-				strcpy(t2p->pdf_title, optarg);
+-				t2p->pdf_title[strlen(optarg)]=0;
++				strcpy((char *)t2p->pdf_title, optarg);
++				t2p->pdf_title[strlen(optarg)] = 0;
+ 				break;
+ 			case 's': 
+-				t2p->pdf_subject= (char*)_TIFFmalloc(strlen(optarg)+1);
++				t2p->pdf_subject = (unsigned char*)
++					_TIFFmalloc(strlen(optarg) + 1);
+ 				if(t2p->pdf_subject==NULL){
+ 					TIFFError(
+ 						TIFF2PDF_MODULE, 
+-						"Can't allocate %u bytes of memory for main", 
++				"Can't allocate %u bytes of memory for main", 
+ 						strlen(optarg)+1); 
+ 					goto failfreet2p;
+ 				}
+-				strcpy(t2p->pdf_subject, optarg);
++				strcpy((char *)t2p->pdf_subject, optarg);
+ 				t2p->pdf_subject[strlen(optarg)]=0;
+ 				break;
+ 			case 'k': 
+-				t2p->pdf_keywords= (char*)_TIFFmalloc(strlen(optarg)+1);
++				t2p->pdf_keywords = (unsigned char*)
++					_TIFFmalloc(strlen(optarg) + 1);
+ 				if(t2p->pdf_keywords==NULL){
+ 					TIFFError(
+ 						TIFF2PDF_MODULE, 
+-						"Can't allocate %u bytes of memory for main", 
+-						strlen(optarg)+1); 
++				"Can't allocate %u bytes of memory for main", 
++						strlen(optarg) + 1); 
+ 					goto failfreet2p;
+ 				}
+-				strcpy(t2p->pdf_keywords, optarg);
+-				t2p->pdf_keywords[strlen(optarg)]=0;
++				strcpy((char *)t2p->pdf_keywords, optarg);
++				t2p->pdf_keywords[strlen(optarg)] = 0;
+ 				break;		
+ 			case 'b':
+ 				t2p->pdf_image_interpolate = 1;
+@@ -698,6 +709,9 @@
+ #if !defined(_WIN32) || defined(AVOID_WIN32_FILEIO)
+ 		close(output->tif_fd);
+ 		output->tif_fd=(int)fileno(stdout);
++# if defined(HAVE_SETMODE) && defined(O_BINARY)
++		setmode(fileno(stdout), O_BINARY);
++# endif
+ #else
+ 		CloseHandle((HANDLE) output->tif_fd);
+ 		output->tif_fd=(int)GetStdHandle(STD_OUTPUT_HANDLE);
+@@ -747,14 +761,15 @@
+ 	"options:",
+ 	" -o: output to file name",
+ #ifdef JPEG_SUPPORT
+-	" -j  compress with JPEG", 
++	" -j: compress with JPEG", 
+ #endif
+ #ifdef ZIP_SUPPORT
+-	" -z  compress with Zip/Deflate",
++	" -z: compress with Zip/Deflate",
+ #endif
+ 	" -q: compression quality",
+-	" -n  no compressed data passthrough",
+-	" -d  do not compress (decompress)",
++	" -n: no compressed data passthrough",
++	" -d: do not compress (decompress)",
++	" -i: invert colors",
+ 	" -u: set distance unit, 'i' for inch, 'm' for centimeter",
+ 	" -x: set x resolution default in dots per unit",
+ 	" -y: set y resolution default in dots per unit",
+@@ -762,15 +777,15 @@
+ 	" -l: length in units",
+ 	" -r: 'd' for resolution default, 'o' for resolution override",
+ 	" -p: paper size, eg \"letter\", \"legal\", \"A4\"",
+-	" -f  set PDF \"Fit Window\" user preference",
++	" -f: set PDF \"Fit Window\" user preference",
+ 	" -e: date, overrides image or current date/time default, YYYYMMDDHHMMSS",
+ 	" -c: sets document creator, overrides image software default",
+ 	" -a: sets document author, overrides image artist default",
+ 	" -t: sets document title, overrides image document name default",
+ 	" -s: sets document subject, overrides image image description default",
+ 	" -k: sets document keywords",
+-	" -b set PDF \"Interpolate\" user preference",
+-	" -h  usage",
++	" -b: set PDF \"Interpolate\" user preference",
++	" -h: usage",
+ 	NULL
+ 	};
+ 	int i=0;
+@@ -2056,75 +2071,101 @@
+ 	if(t2p->pdf_transcode == T2P_TRANSCODE_RAW){
+ #ifdef CCITT_SUPPORT
+ 		if(t2p->pdf_compression == T2P_COMPRESS_G4){
+-			buffer= (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
+-			if(buffer==NULL){
++			buffer = (unsigned char*)
++				_TIFFmalloc(t2p->tiff_datasize);
++			if (buffer == NULL) {
+ 				TIFFError(TIFF2PDF_MODULE, 
+-					"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 					t2p->tiff_datasize, 
+ 					TIFFFileName(input));
+ 				t2p->t2p_error = T2P_ERR_ERROR;
+ 				return(0);
+ 			}
+-			TIFFReadRawStrip(input, 0, (tdata_t) buffer, t2p->tiff_datasize);
++			TIFFReadRawStrip(input, 0, (tdata_t) buffer,
++					 t2p->tiff_datasize);
+ 			if (t2p->tiff_fillorder==FILLORDER_LSB2MSB){
+-					/* make sure is lsb-to-msb bit-endianness fill order */
+-					TIFFReverseBits(buffer, t2p->tiff_datasize);
++					/*
++					 * make sure is lsb-to-msb
++					 * bit-endianness fill order
++					 */
++					TIFFReverseBits(buffer,
++							t2p->tiff_datasize);
+ 			}
+-			TIFFWriteFile(output, (tdata_t) buffer, t2p->tiff_datasize);
++			TIFFWriteFile(output, (tdata_t) buffer,
++				      t2p->tiff_datasize);
+ 			_TIFFfree(buffer);
+ 			return(t2p->tiff_datasize);
+ 		}
+ #endif
+ #ifdef ZIP_SUPPORT
+-		if(t2p->pdf_compression == T2P_COMPRESS_ZIP){
+-			buffer= (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
++		if (t2p->pdf_compression == T2P_COMPRESS_ZIP) {
++			buffer = (unsigned char*)
++				_TIFFmalloc(t2p->tiff_datasize);
+                         memset(buffer, 0, t2p->tiff_datasize);
+-			if(buffer==NULL){
++			if(buffer == NULL){
+ 				TIFFError(TIFF2PDF_MODULE, 
+-					"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 					t2p->tiff_datasize, 
+ 					TIFFFileName(input));
+ 				t2p->t2p_error = T2P_ERR_ERROR;
+ 				return(0);
+ 			}
+-			TIFFReadRawStrip(input, 0, (tdata_t) buffer, t2p->tiff_datasize);
+-			if (t2p->tiff_fillorder==FILLORDER_LSB2MSB){
+-					TIFFReverseBits(buffer, t2p->tiff_datasize);
++			TIFFReadRawStrip(input, 0, (tdata_t) buffer,
++					 t2p->tiff_datasize);
++			if (t2p->tiff_fillorder==FILLORDER_LSB2MSB) {
++					TIFFReverseBits(buffer,
++							t2p->tiff_datasize);
+ 			}
+-			TIFFWriteFile(output, (tdata_t) buffer, t2p->tiff_datasize);
++			TIFFWriteFile(output, (tdata_t) buffer,
++				      t2p->tiff_datasize);
+ 			_TIFFfree(buffer);
+ 			return(t2p->tiff_datasize);
+ 		}
+ #endif
+ #ifdef OJPEG_SUPPORT
+-		if(t2p->tiff_compression == COMPRESSION_OJPEG){
++		if(t2p->tiff_compression == COMPRESSION_OJPEG) {
+ 
+-			if(t2p->tiff_dataoffset != 0){
+-				buffer= (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
++			if(t2p->tiff_dataoffset != 0) {
++				buffer = (unsigned char*)
++					_TIFFmalloc(t2p->tiff_datasize);
+                                 memset(buffer, 0, t2p->tiff_datasize);
+-				if(buffer==NULL){
++				if(buffer == NULL) {
+ 					TIFFError(TIFF2PDF_MODULE, 
+-						"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 						t2p->tiff_datasize, 
+ 						TIFFFileName(input));
+ 					t2p->t2p_error = T2P_ERR_ERROR;
+ 					return(0);
+ 				}
+ 				if(t2p->pdf_ojpegiflength==0){
+-					inputoffset=TIFFSeekFile(input, 0, SEEK_CUR);
+-					TIFFSeekFile(input, t2p->tiff_dataoffset, SEEK_SET);
+-					TIFFReadFile(input, (tdata_t) buffer, t2p->tiff_datasize);
+-					TIFFSeekFile(input, inputoffset, SEEK_SET);
+-					TIFFWriteFile(output, (tdata_t) buffer, t2p->tiff_datasize);
++					inputoffset=TIFFSeekFile(input, 0,
++								 SEEK_CUR);
++					TIFFSeekFile(input,
++						     t2p->tiff_dataoffset,
++						     SEEK_SET);
++					TIFFReadFile(input, (tdata_t) buffer,
++						     t2p->tiff_datasize);
++					TIFFSeekFile(input, inputoffset,
++						     SEEK_SET);
++					TIFFWriteFile(output, (tdata_t) buffer,
++						      t2p->tiff_datasize);
+ 					_TIFFfree(buffer);
+ 					return(t2p->tiff_datasize);
+ 				} else {
+-					inputoffset=TIFFSeekFile(input, 0, SEEK_CUR);
+-					TIFFSeekFile(input, t2p->tiff_dataoffset, SEEK_SET);
+-					bufferoffset=TIFFReadFile(input, (tdata_t) buffer, t2p->pdf_ojpegiflength);
+-					t2p->pdf_ojpegiflength=0;
+-					TIFFSeekFile(input, inputoffset, SEEK_SET);
+-					TIFFGetField(input, TIFFTAG_YCBCRSUBSAMPLING, &h_samp, &v_samp);
++					inputoffset=TIFFSeekFile(input, 0,
++								 SEEK_CUR);
++					TIFFSeekFile(input,
++						     t2p->tiff_dataoffset,
++						     SEEK_SET);
++					bufferoffset = TIFFReadFile(input,
++						(tdata_t) buffer,
++						t2p->pdf_ojpegiflength);
++					t2p->pdf_ojpegiflength = 0;
++					TIFFSeekFile(input, inputoffset,
++						     SEEK_SET);
++					TIFFGetField(input,
++						     TIFFTAG_YCBCRSUBSAMPLING,
++						     &h_samp, &v_samp);
+ 					buffer[bufferoffset++]= 0xff;
+ 					buffer[bufferoffset++]= 0xdd;
+ 					buffer[bufferoffset++]= 0x00;
+@@ -2132,7 +2173,9 @@
+ 					h_samp*=8;
+ 					v_samp*=8;
+ 					ri=(t2p->tiff_width+h_samp-1) / h_samp;
+-					TIFFGetField(input, TIFFTAG_ROWSPERSTRIP, &rows);
++					TIFFGetField(input,
++						     TIFFTAG_ROWSPERSTRIP,
++						     &rows);
+ 					ri*=(rows+v_samp-1)/v_samp;
+ 					buffer[bufferoffset++]= (ri>>8) & 0xff;
+ 					buffer[bufferoffset++]= ri & 0xff;
+@@ -2154,16 +2197,17 @@
+ 			} else {
+ 				if(! t2p->pdf_ojpegdata){
+ 					TIFFError(TIFF2PDF_MODULE, 
+-						"No support for OJPEG image %s with bad tables", 
++				"No support for OJPEG image %s with bad tables", 
+ 						TIFFFileName(input));
+ 					t2p->t2p_error = T2P_ERR_ERROR;
+ 					return(0);
+ 				}
+-				buffer=(unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
++				buffer = (unsigned char*)
++					_TIFFmalloc(t2p->tiff_datasize);
+                                 memset(buffer, 0, t2p->tiff_datasize);
+ 				if(buffer==NULL){
+ 					TIFFError(TIFF2PDF_MODULE, 
+-						"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 						t2p->tiff_datasize, 
+ 						TIFFFileName(input));
+ 					t2p->t2p_error = T2P_ERR_ERROR;
+@@ -2190,7 +2234,7 @@
+ 				_TIFFfree(buffer);
+ 				return(bufferoffset);
+ 				TIFFError(TIFF2PDF_MODULE, 
+-					"No support for OJPEG image %s with no JPEG File Interchange offset", 
++	"No support for OJPEG image %s with no JPEG File Interchange offset", 
+ 					TIFFFileName(input));
+ 				t2p->t2p_error = T2P_ERR_ERROR;
+ 				return(0);
+@@ -2200,11 +2244,12 @@
+ #endif
+ #ifdef JPEG_SUPPORT
+ 		if(t2p->tiff_compression == COMPRESSION_JPEG){
+-			buffer= (unsigned char*) _TIFFmalloc(t2p->tiff_datasize);
++			buffer = (unsigned char*)
++				_TIFFmalloc(t2p->tiff_datasize);
+                         memset(buffer, 0, t2p->tiff_datasize);
+ 			if(buffer==NULL){
+ 				TIFFError(TIFF2PDF_MODULE, 
+-					"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 					t2p->tiff_datasize, 
+ 					TIFFFileName(input));
+ 				t2p->t2p_error = T2P_ERR_ERROR;
+@@ -2221,10 +2266,11 @@
+ 			for(i=0;i<stripcount;i++){
+ 				if(sbc[i]>max_striplength) max_striplength=sbc[i];
+ 			}
+-			stripbuffer=(unsigned char*) _TIFFmalloc(max_striplength);
++			stripbuffer = (unsigned char*)
++				_TIFFmalloc(max_striplength);
+ 			if(stripbuffer==NULL){
+ 				TIFFError(TIFF2PDF_MODULE, 
+-					"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 					max_striplength, 
+ 					TIFFFileName(input));
+ 				_TIFFfree(buffer);
+@@ -2241,7 +2287,7 @@
+ 					i, 
+ 					t2p->tiff_length)){
+ 						TIFFError(TIFF2PDF_MODULE, 
+-							"Can't process JPEG data in input file %s", 
++				"Can't process JPEG data in input file %s", 
+ 							TIFFFileName(input));
+ 						_TIFFfree(samplebuffer);
+ 						_TIFFfree(buffer);
+@@ -2265,7 +2311,7 @@
+                 memset(buffer, 0, t2p->tiff_datasize);
+ 		if(buffer==NULL){
+ 			TIFFError(TIFF2PDF_MODULE, 
+-				"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 				t2p->tiff_datasize, 
+ 				TIFFFileName(input));
+ 			t2p->t2p_error = T2P_ERR_ERROR;
+@@ -2303,7 +2349,7 @@
+                         memset(buffer, 0, t2p->tiff_datasize);
+ 			if(buffer==NULL){
+ 				TIFFError(TIFF2PDF_MODULE, 
+-					"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 					t2p->tiff_datasize, 
+ 					TIFFFileName(input));
+ 				t2p->t2p_error = T2P_ERR_ERROR;
+@@ -2312,7 +2358,7 @@
+ 			samplebuffer = (unsigned char*) _TIFFmalloc(stripsize);
+ 			if(samplebuffer==NULL){
+ 				TIFFError(TIFF2PDF_MODULE, 
+-					"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 					t2p->tiff_datasize, 
+ 					TIFFFileName(input));
+ 				t2p->t2p_error = T2P_ERR_ERROR;
+@@ -2328,7 +2374,7 @@
+ 							sepstripsize);
+ 					if(read==-1){
+ 						TIFFError(TIFF2PDF_MODULE, 
+-							"Error on decoding strip %u of %s", 
++					"Error on decoding strip %u of %s", 
+ 							i + j*stripcount, 
+ 							TIFFFileName(input));
+ 							_TIFFfree(buffer);
+@@ -2352,7 +2398,7 @@
+                 memset(buffer, 0, t2p->tiff_datasize);
+ 		if(buffer==NULL){
+ 			TIFFError(TIFF2PDF_MODULE, 
+-				"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 				t2p->tiff_datasize, 
+ 				TIFFFileName(input));
+ 			t2p->t2p_error = T2P_ERR_ERROR;
+@@ -2385,7 +2431,7 @@
+ 				t2p->tiff_datasize * t2p->tiff_samplesperpixel);
+ 			if(samplebuffer==NULL){
+ 				TIFFError(TIFF2PDF_MODULE, 
+-					"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 					t2p->tiff_datasize, 
+ 					TIFFFileName(input));
+ 				t2p->t2p_error = T2P_ERR_ERROR;
+@@ -2415,7 +2461,7 @@
+ 				t2p->tiff_width*t2p->tiff_length*4);
+ 			if(samplebuffer==NULL){
+ 				TIFFError(TIFF2PDF_MODULE, 
+-					"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
++	"Can't allocate %u bytes of memory for t2p_readwrite_pdf_image, %s", 
+ 					t2p->tiff_datasize, 
+ 					TIFFFileName(input));
+ 				t2p->t2p_error = T2P_ERR_ERROR;
+@@ -2432,7 +2478,7 @@
+ 				ORIENTATION_TOPLEFT,
+ 				0)){
+ 				TIFFError(TIFF2PDF_MODULE, 
+-					"Can't use TIFFReadRGBAImageOriented to extract RGB image from %s", 
++	"Can't use TIFFReadRGBAImageOriented to extract RGB image from %s", 
+ 					TIFFFileName(input));
+ 				t2p->t2p_error = T2P_ERR_ERROR;
+ 				return(0);
+@@ -2487,7 +2533,7 @@
+ 		}
+ 		if(TIFFSetField(output, TIFFTAG_COMPRESSION, COMPRESSION_JPEG)==0){
+ 			TIFFError(TIFF2PDF_MODULE, 
+-				"Unable to use JPEG compression for input %s and output %s", 
++		"Unable to use JPEG compression for input %s and output %s", 
+ 				TIFFFileName(input),
+ 				TIFFFileName(output));
+ 			_TIFFfree(buffer);
+@@ -2985,10 +3031,11 @@
+ 	}
+ 	
+ 	output->tif_writeproc=t2p->tiff_writeproc;
+-	bufferoffset=TIFFWriteEncodedStrip(output, (tstrip_t) 0, buffer, TIFFStripSize(output)); 
+-	if(buffer != NULL){
++	bufferoffset = TIFFWriteEncodedStrip(output, (tstrip_t) 0, buffer,
++					     TIFFStripSize(output)); 
++	if(buffer != NULL) {
+ 		_TIFFfree(buffer);
+-		buffer=NULL;
++		buffer = NULL;
+ 	}
+ 	if(bufferoffset==-1){
+ 		TIFFError(TIFF2PDF_MODULE, 
+@@ -3533,7 +3580,7 @@
+ 	
+ 	buflen=sprintf(buffer, "%%PDF-%u.%u ", t2p->pdf_majorversion&0xff, t2p->pdf_minorversion&0xff);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t)"\r%\342\343\317\323\r\n", 8);
++	written += TIFFWriteFile(output, (tdata_t)"\n%\342\343\317\323\n", 7);
+ 
+ 	return(written);
+ }
+@@ -3550,7 +3597,7 @@
+ 
+ 	buflen=sprintf(buffer, "%lu", (unsigned long)number);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen );
+-	written += TIFFWriteFile(output, (tdata_t) " 0 obj\r", 7);
++	written += TIFFWriteFile(output, (tdata_t) " 0 obj\n", 7);
+ 
+ 	return(written);
+ }
+@@ -3563,7 +3610,7 @@
+ 
+ 	tsize_t written=0;
+ 
+-	written += TIFFWriteFile(output, (tdata_t) "endobj\r", 7);
++	written += TIFFWriteFile(output, (tdata_t) "endobj\n", 7);
+ 
+ 	return(written);
+ }
+@@ -3572,15 +3619,15 @@
+ 	This function writes a PDF name object to output.
+ */
+ 
+-tsize_t t2p_write_pdf_name(char* name, TIFF* output){
++tsize_t t2p_write_pdf_name(unsigned char* name, TIFF* output){
+ 
+ 	tsize_t written=0;
+ 	uint32 i=0;
+-	char buffer[4];
++	char buffer[64];
+ 	uint16 nextchar=0;
+ 	uint32 namelen=0;
+ 	
+-	namelen=strlen(name);
++	namelen = strlen((char *)name);
+ 	if (namelen>126) {
+ 		namelen=126;
+ 	}
+@@ -3588,58 +3635,71 @@
+ 	for (i=0;i<namelen;i++){
+ 		if ( ((unsigned char)name[i]) < 0x21){
+ 			sprintf(buffer, "#%.2X", name[i]);
++			buffer[sizeof(buffer) - 1] = '\0';
+ 			written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 			nextchar=1;
+ 		}
+ 		if ( ((unsigned char)name[i]) > 0x7E){
+-			sprintf(buffer, "#%.2X", name[i]); 
++			sprintf(buffer, "#%.2X", name[i]);
++			buffer[sizeof(buffer) - 1] = '\0';
+ 			written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 			nextchar=1;
+ 		}
+ 		if (nextchar==0){
+ 			switch (name[i]){
+ 				case 0x23:
+-					sprintf(buffer, "#%.2X", name[i]); 
++					sprintf(buffer, "#%.2X", name[i]);
++					buffer[sizeof(buffer) - 1] = '\0';
+ 					written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 					break;
+ 				case 0x25:
+-					sprintf(buffer, "#%.2X", name[i]); 
++					sprintf(buffer, "#%.2X", name[i]);
++					buffer[sizeof(buffer) - 1] = '\0';
+ 					written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 					break;
+ 				case 0x28:
+-					sprintf(buffer, "#%.2X", name[i]); 
++					sprintf(buffer, "#%.2X", name[i]);
++					buffer[sizeof(buffer) - 1] = '\0';
+ 					written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 					break;
+ 				case 0x29:
+ 					sprintf(buffer, "#%.2X", name[i]); 
++					buffer[sizeof(buffer) - 1] = '\0';
+ 					written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 					break;
+ 				case 0x2F:
+ 					sprintf(buffer, "#%.2X", name[i]); 
++					buffer[sizeof(buffer) - 1] = '\0';
+ 					written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 					break;
+ 				case 0x3C:
+ 					sprintf(buffer, "#%.2X", name[i]); 
++					buffer[sizeof(buffer) - 1] = '\0';
+ 					written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 					break;
+ 				case 0x3E:
+-					sprintf(buffer, "#%.2X", name[i]); 
++					sprintf(buffer, "#%.2X", name[i]);
++					buffer[sizeof(buffer) - 1] = '\0';
+ 					written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 					break;
+ 				case 0x5B:
+ 					sprintf(buffer, "#%.2X", name[i]); 
++					buffer[sizeof(buffer) - 1] = '\0';
+ 					written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 					break;
+ 				case 0x5D:
+-					sprintf(buffer, "#%.2X", name[i]); 
++					sprintf(buffer, "#%.2X", name[i]);
++					buffer[sizeof(buffer) - 1] = '\0';
+ 					written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 					break;
+ 				case 0x7B:
+ 					sprintf(buffer, "#%.2X", name[i]); 
++					buffer[sizeof(buffer) - 1] = '\0';
+ 					written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 					break;
+ 				case 0x7D:
+ 					sprintf(buffer, "#%.2X", name[i]); 
++					buffer[sizeof(buffer) - 1] = '\0';
+ 					written += TIFFWriteFile(output, (tdata_t) buffer, 3);
+ 					break;
+ 				default:
+@@ -3657,18 +3717,19 @@
+ 	This function writes a PDF string object to output.
+ */
+ 	
+-tsize_t t2p_write_pdf_string(char* pdfstr, TIFF* output){
++tsize_t t2p_write_pdf_string(unsigned char* pdfstr, TIFF* output){
+ 
+-	tsize_t written=0;
+-	uint32 i=0;
+-	char buffer[5];
+-	uint32 len=0;
++	tsize_t written = 0;
++	uint32 i = 0;
++	char buffer[64];
++	uint32 len = 0;
+ 	
+-	len=strlen(pdfstr);
++	len = strlen((char *)pdfstr);
+ 	written += TIFFWriteFile(output, (tdata_t) "(", 1);
+-	for (i=0;i<len;i++){
++	for (i=0; i<len; i++) {
+ 		if((pdfstr[i]&0x80) || (pdfstr[i]==127) || (pdfstr[i]<32)){
+ 			sprintf(buffer, "\\%.3o", pdfstr[i]);
++			buffer[sizeof(buffer) - 1] = '\0';
+ 			written += TIFFWriteFile(output, (tdata_t) buffer, 4);
+ 		} else {
+ 			switch (pdfstr[i]){
+@@ -3728,7 +3789,7 @@
+ 
+ 	tsize_t written=0;
+ 
+-	written += TIFFWriteFile(output, (tdata_t) "stream\r\n", 8);
++	written += TIFFWriteFile(output, (tdata_t) "stream\n", 7);
+ 
+ 	return(written);
+ }
+@@ -3741,7 +3802,7 @@
+ 
+ 	tsize_t written=0;
+ 
+-	written += TIFFWriteFile(output, (tdata_t) "\rendstream\r", 11);
++	written += TIFFWriteFile(output, (tdata_t) "\nendstream\n", 11);
+ 
+ 	return(written);
+ }
+@@ -3762,7 +3823,7 @@
+ 	} else {
+ 		buflen=sprintf(buffer, "%lu", (unsigned long)number);
+ 		written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-		written += TIFFWriteFile(output, (tdata_t) " 0 R \r", 6);
++		written += TIFFWriteFile(output, (tdata_t) " 0 R \n", 6);
+ 	}
+ 	
+ 	return(written);
+@@ -3776,7 +3837,7 @@
+ 
+ 	tsize_t written=0;
+ 
+-	written += TIFFWriteFile(output, (tdata_t) "<< \r", 4);
++	written += TIFFWriteFile(output, (tdata_t) "<< \n", 4);
+ 
+ 	return(written);
+ }
+@@ -3789,7 +3850,7 @@
+ 
+ 	tsize_t written=0;
+ 
+-	written += TIFFWriteFile(output, (tdata_t) " >>\r", 4);
++	written += TIFFWriteFile(output, (tdata_t) " >>\n", 4);
+ 
+ 	return(written);
+ }
+@@ -3806,7 +3867,7 @@
+ 
+ 	buflen=sprintf(buffer, "%lu", (unsigned long)len);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++	written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 
+ 	return(written);
+ }
+@@ -3822,17 +3883,17 @@
+ 	int buflen=0;
+ 
+ 	written += TIFFWriteFile(output, 
+-		(tdata_t)"<< \r/Type /Catalog \r/Pages ", 
++		(tdata_t)"<< \n/Type /Catalog \n/Pages ", 
+ 		27);
+ 	buflen=sprintf(buffer, "%lu", (unsigned long)t2p->pdf_pages);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen );
+-	written += TIFFWriteFile(output, (tdata_t) " 0 R \r", 6);
++	written += TIFFWriteFile(output, (tdata_t) " 0 R \n", 6);
+ 	if(t2p->pdf_fitwindow){
+ 		written += TIFFWriteFile(output, 
+-			(tdata_t) "/ViewerPreferences <</FitWindow true>>\r", 
++			(tdata_t) "/ViewerPreferences <</FitWindow true>>\n", 
+ 			39);
+ 	}
+-	written += TIFFWriteFile(output, (tdata_t)">>\r", 3);
++	written += TIFFWriteFile(output, (tdata_t)">>\n", 3);
+ 
+ 	return(written);
+ }
+@@ -3843,116 +3904,138 @@
+ 
+ tsize_t t2p_write_pdf_info(T2P* t2p, TIFF* input, TIFF* output){
+ 
+-	tsize_t written=0;
+-	char* info;
++	tsize_t written = 0;
++	unsigned char* info;
+ 	char buffer[512];
+-	int buflen=0;
++	int buflen = 0;
+ 	
+ 	if(t2p->pdf_datetime==NULL){
+ 		t2p_pdf_tifftime(t2p, input);
+ 	}
+-	if(strlen(t2p->pdf_datetime) > 0){
+-		written += TIFFWriteFile(output, (tdata_t) "<< \r/CreationDate ", 18);
++	if(strlen((char *)t2p->pdf_datetime) > 0){
++		written += TIFFWriteFile(output, (tdata_t) "<< \n/CreationDate ", 18);
+ 		written += t2p_write_pdf_string(t2p->pdf_datetime, output);
+-		written += TIFFWriteFile(output, (tdata_t) "\r/ModDate ", 10);
++		written += TIFFWriteFile(output, (tdata_t) "\n/ModDate ", 10);
+ 		written += t2p_write_pdf_string(t2p->pdf_datetime, output);
+ 	}
+-	written += TIFFWriteFile(output, (tdata_t) "\r/Producer ", 11);
+-	_TIFFmemset((tdata_t)buffer, 0x00, 512);
+-	buflen=sprintf(buffer, "libtiff / tiff2pdf - %d / %s", TIFFLIB_VERSION, T2P_VERSION);
+-	written += t2p_write_pdf_string(buffer, output);
+-	written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++	written += TIFFWriteFile(output, (tdata_t) "\n/Producer ", 11);
++	_TIFFmemset((tdata_t)buffer, 0x00, sizeof(buffer));
++	buflen = sprintf(buffer, "libtiff / tiff2pdf - %d / %s",
++			 TIFFLIB_VERSION, T2P_VERSION);
++	written += t2p_write_pdf_string((unsigned char*)buffer, output);
++	written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 	if(t2p->pdf_creator != NULL){ 
+-		if(strlen(t2p->pdf_creator)>0){
+-			if(strlen(t2p->pdf_creator)>511){t2p->pdf_creator[512]=(char)0;}
++		if(strlen((char *)t2p->pdf_creator)>0){
++			if(strlen((char *)t2p->pdf_creator) > 511) {
++				t2p->pdf_creator[512] = '\0';
++			}
+ 			written += TIFFWriteFile(output, (tdata_t) "/Creator ", 9);
+ 			written += t2p_write_pdf_string(t2p->pdf_creator, output);
+-			written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++			written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 		}
+ 	} else{
+ 		if( TIFFGetField(input, TIFFTAG_SOFTWARE, &info) != 0){
+-			if(strlen(info)>511){info[512]=(char)0;}
++			if(strlen((char *)info) > 511) {
++				info[512] = '\0';
++			}
+ 			written += TIFFWriteFile(output, (tdata_t) "/Creator ", 9);
+ 			written += t2p_write_pdf_string(info, output);
+-			written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++			written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 		}
+ 	}
+-	if(t2p->pdf_author != NULL){ 
+-		if(strlen(t2p->pdf_author)>0){
+-			if(strlen(t2p->pdf_author)>511){t2p->pdf_author[512]=(char)0;}
++	if(t2p->pdf_author != NULL) { 
++		if(strlen((char *)t2p->pdf_author) > 0) {
++			if(strlen((char *)t2p->pdf_author) > 511) {
++				t2p->pdf_author[512] = '\0';
++			}
+ 			written += TIFFWriteFile(output, (tdata_t) "/Author ", 8);
+ 			written += t2p_write_pdf_string(t2p->pdf_author, output);
+-			written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++			written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 		}
+ 	} else{
+ 		if( TIFFGetField(input, TIFFTAG_ARTIST, &info) != 0){
+-			if(strlen(info)>511){info[512]=(char)0;}
++			if(strlen((char *)info) > 511) {
++				info[512] = '\0';
++			}
+ 			written += TIFFWriteFile(output, (tdata_t) "/Author ", 8);
+ 			written += t2p_write_pdf_string(info, output);
+-			written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++			written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 		} else if ( TIFFGetField(input, TIFFTAG_COPYRIGHT, &info) != 0){
+-			if(strlen(info)>511){info[512]=(char)0;}
++			if(strlen((char *)info) > 511) {
++				info[512] = '\0';
++			}
+ 			written += TIFFWriteFile(output, (tdata_t) "/Author ", 8);
+ 			written += t2p_write_pdf_string(info, output);
+-			written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++			written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 		} 
+ 	}
+-	if(t2p->pdf_title != NULL){
+-		if(strlen(t2p->pdf_title)>0){
+-			if(strlen(t2p->pdf_title)>511){t2p->pdf_title[512]=(char)0;}
++	if(t2p->pdf_title != NULL) {
++		if(strlen((char *)t2p->pdf_title) > 0) {
++			if(strlen((char *)t2p->pdf_title) > 511) {
++				t2p->pdf_title[512] = '\0';
++			}
+ 			written += TIFFWriteFile(output, (tdata_t) "/Title ", 7);
+ 			written += t2p_write_pdf_string(t2p->pdf_title, output);
+-			written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++			written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 		}
+ 	} else{
+ 		if( TIFFGetField(input, TIFFTAG_DOCUMENTNAME, &info) != 0){
+-			if(strlen(info)>511){info[512]=(char)0;}
++			if(strlen((char *)info) > 511) {
++				info[512] = '\0';
++			}
+ 			written += TIFFWriteFile(output, (tdata_t) "/Title ", 7);
+ 			written += t2p_write_pdf_string(info, output);
+-			written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++			written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 		}
+ 	}
+-	if(t2p->pdf_subject != NULL){
+-		if(strlen(t2p->pdf_subject)>0){
+-			if(strlen(t2p->pdf_subject)>511){t2p->pdf_subject[512]=(char)0;}
++	if(t2p->pdf_subject != NULL) {
++		if(strlen((char *)t2p->pdf_subject) > 0) {
++			if(strlen((char *)t2p->pdf_subject) > 511) {
++				t2p->pdf_subject[512] = '\0';
++			}
+ 			written += TIFFWriteFile(output, (tdata_t) "/Subject ", 9);
+ 			written += t2p_write_pdf_string(t2p->pdf_subject, output);
+-			written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++			written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 		}
+-	} else{
+-		if( TIFFGetField(input, TIFFTAG_IMAGEDESCRIPTION, &info) != 0){
+-			if(strlen(info)>511){info[512]=(char)0;}
++	} else {
++		if(TIFFGetField(input, TIFFTAG_IMAGEDESCRIPTION, &info) != 0) {
++			if(strlen((char *)info) > 511) {
++				info[512] = '\0';
++			}
+ 			written += TIFFWriteFile(output, (tdata_t) "/Subject ", 9);
+ 			written += t2p_write_pdf_string(info, output);
+-			written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++			written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 		}
+ 	}
+-	if(t2p->pdf_keywords != NULL){ 
+-		if(strlen(t2p->pdf_keywords)>0){
+-			if(strlen(t2p->pdf_keywords)>511){t2p->pdf_keywords[512]=(char)0;}
++	if(t2p->pdf_keywords != NULL) { 
++		if(strlen((char *)t2p->pdf_keywords) > 0) {
++			if(strlen((char *)t2p->pdf_keywords) > 511) {
++				t2p->pdf_keywords[512] = '\0';
++			}
+ 			written += TIFFWriteFile(output, (tdata_t) "/Keywords ", 10);
+ 			written += t2p_write_pdf_string(t2p->pdf_keywords, output);
+-			written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++			written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 		}
+ 	}
+-	written += TIFFWriteFile(output, (tdata_t) ">> \r", 4);	
++	written += TIFFWriteFile(output, (tdata_t) ">> \n", 4);	
+ 
+ 	return(written);
+ }
+ 
+ /*
+-	This function fills a string of a T2P struct with the current time as a PDF date string, 
+-	it is called by t2p_pdf_tifftime.
+-*/
++ * This function fills a string of a T2P struct with the current time as a PDF
++ * date string, it is called by t2p_pdf_tifftime.
++ */
+ 
+-void t2p_pdf_currenttime(T2P* t2p){
++void t2p_pdf_currenttime(T2P* t2p)
++{
+ 
+ 	struct tm* currenttime;
+ 	time_t timenow;
+ 
+ 	timenow=time(0);
+ 	currenttime=localtime(&timenow);
+-	sprintf(t2p->pdf_datetime, "D:%.4d%.2d%.2d%.2d%.2d%.2d",
++	sprintf((char *)t2p->pdf_datetime, "D:%.4d%.2d%.2d%.2d%.2d%.2d",
+ 		(currenttime->tm_year+1900) % 65536, 
+ 		(currenttime->tm_mon+1) % 256, 
+ 		(currenttime->tm_mday) % 256, 
+@@ -3964,25 +4047,24 @@
+ }
+ 
+ /*
+-	This function fills a string of a T2P struct with the date and time of a TIFF file if it 
+-	exists or the current time as a PDF date string.
+-*/
++ * This function fills a string of a T2P struct with the date and time of a
++ * TIFF file if it exists or the current time as a PDF date string.
++ */
+ 
+ void t2p_pdf_tifftime(T2P* t2p, TIFF* input){
+ 
+ 	char* datetime;
+ 
+-	t2p->pdf_datetime= (char*) _TIFFmalloc(19);
+-	if(t2p->pdf_datetime==NULL){
++	t2p->pdf_datetime = (unsigned char*) _TIFFmalloc(19);
++	if(t2p->pdf_datetime == NULL){
+ 		TIFFError(TIFF2PDF_MODULE, 
+-			"Can't allocate %u bytes of memory for t2p_pdf_tiff_time", 
+-			17); 
++		"Can't allocate %u bytes of memory for t2p_pdf_tiff_time", 17); 
+ 		t2p->t2p_error = T2P_ERR_ERROR;
+ 		return;
+ 	}
+-	t2p->pdf_datetime[16]=0;
++	t2p->pdf_datetime[16] = '\0';
+ 	if( TIFFGetField(input, TIFFTAG_DATETIME, &datetime) != 0 
+-	&& (strlen(datetime) >= 19) ){
++	    && (strlen(datetime) >= 19) ){
+ 		t2p->pdf_datetime[0]='D';
+ 		t2p->pdf_datetime[1]=':';
+ 		t2p->pdf_datetime[2]=datetime[0];
+@@ -4007,12 +4089,11 @@
+ }
+ 
+ /*
+-	This function writes a PDF Pages Tree structure to output.
+-*/
+-
+-tsize_t t2p_write_pdf_pages(T2P* t2p, 
+-							TIFF* output){
++ * This function writes a PDF Pages Tree structure to output.
++ */
+ 
++tsize_t t2p_write_pdf_pages(T2P* t2p, TIFF* output)
++{
+ 	tsize_t written=0;
+ 	tdir_t i=0;
+ 	char buffer[16];
+@@ -4020,15 +4101,14 @@
+ 
+ 	int page=0;
+ 	written += TIFFWriteFile(output, 
+-		(tdata_t) "<< \r/Type /Pages \r/Kids [ ", 
+-		26);
++		(tdata_t) "<< \n/Type /Pages \n/Kids [ ", 26);
+ 	page = t2p->pdf_pages+1;
+ 	for (i=0;i<t2p->tiff_pagecount;i++){
+ 		buflen=sprintf(buffer, "%d", page);
+ 		written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 		written += TIFFWriteFile(output, (tdata_t) " 0 R ", 5);
+ 		if ( ((i+1)%8)==0 ) {
+-			written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++			written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 		}
+ 		page +=3;
+ 		page += t2p->tiff_pages[i].page_extra;
+@@ -4038,11 +4118,11 @@
+ 			page +=2;
+ 		}
+ 	}
+-	written += TIFFWriteFile(output, (tdata_t) "] \r/Count ", 10);
++	written += TIFFWriteFile(output, (tdata_t) "] \n/Count ", 10);
+ 	_TIFFmemset(buffer, 0x00, 16);
+ 	buflen=sprintf(buffer, "%d", t2p->tiff_pagecount);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t) " \r>> \r", 6);
++	written += TIFFWriteFile(output, (tdata_t) " \n>> \n", 6);
+ 
+ 	return(written);
+ }
+@@ -4058,10 +4138,10 @@
+ 	char buffer[16];
+ 	int buflen=0;
+ 	
+-	written += TIFFWriteFile(output, (tdata_t) "<<\r/Type /Page \r/Parent ", 24);
++	written += TIFFWriteFile(output, (tdata_t) "<<\n/Type /Page \n/Parent ", 24);
+ 	buflen=sprintf(buffer, "%lu", (unsigned long)t2p->pdf_pages);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t) " 0 R \r", 6);
++	written += TIFFWriteFile(output, (tdata_t) " 0 R \n", 6);
+ 	written += TIFFWriteFile(output, (tdata_t) "/MediaBox [", 11); 
+ 	buflen=sprintf(buffer, "%.4f",t2p->pdf_mediabox.x1);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+@@ -4074,14 +4154,14 @@
+ 	written += TIFFWriteFile(output, (tdata_t) " ", 1); 
+ 	buflen=sprintf(buffer, "%.4f",t2p->pdf_mediabox.y2);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t) "] \r", 3); 
++	written += TIFFWriteFile(output, (tdata_t) "] \n", 3); 
+ 	written += TIFFWriteFile(output, (tdata_t) "/Contents ", 10);
+ 	buflen=sprintf(buffer, "%lu", (unsigned long)(object + 1));
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t) " 0 R \r", 6);
+-	written += TIFFWriteFile(output, (tdata_t) "/Resources << \r", 15);
++	written += TIFFWriteFile(output, (tdata_t) " 0 R \n", 6);
++	written += TIFFWriteFile(output, (tdata_t) "/Resources << \n", 15);
+ 	if( t2p->tiff_tiles[t2p->pdf_page].tiles_tilecount != 0 ){
+-		written += TIFFWriteFile(output, (tdata_t) "/XObject <<\r", 12);
++		written += TIFFWriteFile(output, (tdata_t) "/XObject <<\n", 12);
+ 		for(i=0;i<t2p->tiff_tiles[t2p->pdf_page].tiles_tilecount;i++){
+ 			written += TIFFWriteFile(output, (tdata_t) "/Im", 3);
+ 			buflen = sprintf(buffer, "%u", t2p->pdf_page+1);
+@@ -4097,12 +4177,12 @@
+ 			written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 			written += TIFFWriteFile(output, (tdata_t) " 0 R ", 5);
+ 			if(i%4==3){
+-				written += TIFFWriteFile(output, (tdata_t) "\r", 1);
++				written += TIFFWriteFile(output, (tdata_t) "\n", 1);
+ 			}
+ 		}
+-		written += TIFFWriteFile(output, (tdata_t) ">>\r", 3);
++		written += TIFFWriteFile(output, (tdata_t) ">>\n", 3);
+ 	} else {
+-			written += TIFFWriteFile(output, (tdata_t) "/XObject <<\r", 12);
++			written += TIFFWriteFile(output, (tdata_t) "/XObject <<\n", 12);
+ 			written += TIFFWriteFile(output, (tdata_t) "/Im", 3);
+ 			buflen = sprintf(buffer, "%u", t2p->pdf_page+1);
+ 			written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+@@ -4113,7 +4193,7 @@
+ 				(unsigned long)(object+3+(2*i)+t2p->tiff_pages[t2p->pdf_page].page_extra)); 
+ 			written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 			written += TIFFWriteFile(output, (tdata_t) " 0 R ", 5);
+-		written += TIFFWriteFile(output, (tdata_t) ">>\r", 3);
++		written += TIFFWriteFile(output, (tdata_t) ">>\n", 3);
+ 	}
+ 	if(t2p->tiff_transferfunctioncount != 0) {
+ 		written += TIFFWriteFile(output, (tdata_t) "/ExtGState <<", 13);
+@@ -4124,7 +4204,7 @@
+ 			(unsigned long)(object + 3)); 
+ 		written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 		written += TIFFWriteFile(output, (tdata_t) " 0 R ", 5);
+-		written += TIFFWriteFile(output, (tdata_t) ">> \r", 4);
++		written += TIFFWriteFile(output, (tdata_t) ">> \n", 4);
+ 	}
+ 	written += TIFFWriteFile(output, (tdata_t) "/ProcSet [ ", 11);
+ 	if(t2p->pdf_colorspace == T2P_CS_BILEVEL 
+@@ -4137,7 +4217,7 @@
+ 			written += TIFFWriteFile(output, (tdata_t) "/ImageI ", 8);
+ 		}
+ 	}
+-	written += TIFFWriteFile(output, (tdata_t) "]\r>>\r>>\r", 8);
++	written += TIFFWriteFile(output, (tdata_t) "]\n>>\n>>\n", 8);
+ 
+ 	return(written);
+ }
+@@ -4476,7 +4556,7 @@
+ 		for(i=0;i<t2p->tiff_tiles[t2p->pdf_page].tiles_tilecount; i++){
+ 			box=t2p->tiff_tiles[t2p->pdf_page].tiles_tiles[i].tile_box;
+ 			buflen=sprintf(buffer, 
+-				"q %s %.4f %.4f %.4f %.4f %.4f %.4f cm /Im%d_%ld Do Q\r", 
++				"q %s %.4f %.4f %.4f %.4f %.4f %.4f cm /Im%d_%ld Do Q\n", 
+ 				t2p->tiff_transferfunctioncount?"/GS1 gs ":"",
+ 				box.mat[0],
+ 				box.mat[1],
+@@ -4491,7 +4571,7 @@
+ 	} else {
+ 		box=t2p->pdf_imagebox;
+ 		buflen=sprintf(buffer, 
+-			"q %s %.4f %.4f %.4f %.4f %.4f %.4f cm /Im%d Do Q\r", 
++			"q %s %.4f %.4f %.4f %.4f %.4f %.4f cm /Im%d Do Q\n", 
+ 			t2p->tiff_transferfunctioncount?"/GS1 gs ":"",
+ 			box.mat[0],
+ 			box.mat[1],
+@@ -4520,7 +4600,7 @@
+ 
+ 	written += t2p_write_pdf_stream_dict(0, t2p->pdf_xrefcount+1, output); 
+ 	written += TIFFWriteFile(output, 
+-		(tdata_t) "/Type /XObject \r/Subtype /Image \r/Name /Im", 
++		(tdata_t) "/Type /XObject \n/Subtype /Image \n/Name /Im", 
+ 		42);
+ 	buflen=sprintf(buffer, "%u", t2p->pdf_page+1);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+@@ -4529,7 +4609,7 @@
+ 		buflen=sprintf(buffer, "%lu", (unsigned long)tile);
+ 		written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 	}
+-	written += TIFFWriteFile(output, (tdata_t) "\r/Width ", 8);
++	written += TIFFWriteFile(output, (tdata_t) "\n/Width ", 8);
+ 	_TIFFmemset((tdata_t)buffer, 0x00, 16);
+ 	if(tile==0){
+ 		buflen=sprintf(buffer, "%lu", (unsigned long)t2p->tiff_width);
+@@ -4547,7 +4627,7 @@
+ 		}
+ 	}
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t) "\r/Height ", 9);
++	written += TIFFWriteFile(output, (tdata_t) "\n/Height ", 9);
+ 	_TIFFmemset((tdata_t)buffer, 0x00, 16);
+ 	if(tile==0){
+ 		buflen=sprintf(buffer, "%lu", (unsigned long)t2p->tiff_length);
+@@ -4565,15 +4645,15 @@
+ 		}
+ 	}
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t) "\r/BitsPerComponent ", 19);
++	written += TIFFWriteFile(output, (tdata_t) "\n/BitsPerComponent ", 19);
+ 	_TIFFmemset((tdata_t)buffer, 0x00, 16);
+ 	buflen=sprintf(buffer, "%u", t2p->tiff_bitspersample);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t) "\r/ColorSpace ", 13);
++	written += TIFFWriteFile(output, (tdata_t) "\n/ColorSpace ", 13);
+ 	written += t2p_write_pdf_xobject_cs(t2p, output);
+ 	if (t2p->pdf_image_interpolate)
+ 		written += TIFFWriteFile(output,
+-					 (tdata_t) "\r/Interpolate true", 18);
++					 (tdata_t) "\n/Interpolate true", 18);
+ 	if( (t2p->pdf_switchdecode != 0)
+ #ifdef CCITT_SUPPORT
+ 		&& ! (t2p->pdf_colorspace == T2P_CS_BILEVEL 
+@@ -4617,31 +4697,31 @@
+ 		_TIFFmemset(buffer, 0x00, 16);
+ 		buflen=sprintf(buffer, "%lu", (unsigned long)t2p->pdf_palettecs ); 
+ 		written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-		written += TIFFWriteFile(output, (tdata_t) " 0 R ]\r", 7);
++		written += TIFFWriteFile(output, (tdata_t) " 0 R ]\n", 7);
+ 		return(written);
+ 	}
+ 	if(t2p->pdf_colorspace & T2P_CS_BILEVEL){
+-			written += TIFFWriteFile(output, (tdata_t) "/DeviceGray \r", 13);
++			written += TIFFWriteFile(output, (tdata_t) "/DeviceGray \n", 13);
+ 	}
+ 	if(t2p->pdf_colorspace & T2P_CS_GRAY){
+ 			if(t2p->pdf_colorspace & T2P_CS_CALGRAY){
+ 				written += t2p_write_pdf_xobject_calcs(t2p, output);
+ 			} else {
+-				written += TIFFWriteFile(output, (tdata_t) "/DeviceGray \r", 13);
++				written += TIFFWriteFile(output, (tdata_t) "/DeviceGray \n", 13);
+ 			}
+ 	}
+ 	if(t2p->pdf_colorspace & T2P_CS_RGB){
+ 			if(t2p->pdf_colorspace & T2P_CS_CALRGB){
+ 				written += t2p_write_pdf_xobject_calcs(t2p, output);
+ 			} else {
+-				written += TIFFWriteFile(output, (tdata_t) "/DeviceRGB \r", 12);
++				written += TIFFWriteFile(output, (tdata_t) "/DeviceRGB \n", 12);
+ 			}
+ 	}
+ 	if(t2p->pdf_colorspace & T2P_CS_CMYK){
+-			written += TIFFWriteFile(output, (tdata_t) "/DeviceCMYK \r", 13);
++			written += TIFFWriteFile(output, (tdata_t) "/DeviceCMYK \n", 13);
+ 	}
+ 	if(t2p->pdf_colorspace & T2P_CS_LAB){
+-			written += TIFFWriteFile(output, (tdata_t) "[/Lab << \r", 10);
++			written += TIFFWriteFile(output, (tdata_t) "[/Lab << \n", 10);
+ 			written += TIFFWriteFile(output, (tdata_t) "/WhitePoint ", 12);
+ 			X_W = t2p->tiff_whitechromaticities[0];
+ 			Y_W = t2p->tiff_whitechromaticities[1];
+@@ -4649,7 +4729,7 @@
+ 			X_W /= Y_W;
+ 			Z_W /= Y_W;
+ 			Y_W = 1.0F;
+-			buflen=sprintf(buffer, "[%.4f %.4f %.4f] \r", X_W, Y_W, Z_W);
++			buflen=sprintf(buffer, "[%.4f %.4f %.4f] \n", X_W, Y_W, Z_W);
+ 			written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 			X_W = 0.3457F; /* 0.3127F; */ /* D50, commented D65 */
+ 			Y_W = 0.3585F; /* 0.3290F; */
+@@ -4657,16 +4737,16 @@
+ 			X_W /= Y_W;
+ 			Z_W /= Y_W;
+ 			Y_W = 1.0F;
+-			buflen=sprintf(buffer, "[%.4f %.4f %.4f] \r", X_W, Y_W, Z_W);
++			buflen=sprintf(buffer, "[%.4f %.4f %.4f] \n", X_W, Y_W, Z_W);
+ 			written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 			written += TIFFWriteFile(output, (tdata_t) "/Range ", 7);
+-			buflen=sprintf(buffer, "[%d %d %d %d] \r", 
++			buflen=sprintf(buffer, "[%d %d %d %d] \n", 
+ 				t2p->pdf_labrange[0], 
+ 				t2p->pdf_labrange[1], 
+ 				t2p->pdf_labrange[2], 
+ 				t2p->pdf_labrange[3]);
+ 			written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-			written += TIFFWriteFile(output, (tdata_t) ">>] \r", 5);
++			written += TIFFWriteFile(output, (tdata_t) ">>] \n", 5);
+ 			
+ 	}
+ 	
+@@ -4679,7 +4759,7 @@
+ 	char buffer[16];
+ 	int buflen=0;
+ 
+-	written += TIFFWriteFile(output, (tdata_t) "<< /Type /ExtGState \r/TR ", 25);
++	written += TIFFWriteFile(output, (tdata_t) "<< /Type /ExtGState \n/TR ", 25);
+ 	if(t2p->tiff_transferfunctioncount == 1){
+ 		buflen=sprintf(buffer, "%lu",
+ 			       (unsigned long)(t2p->pdf_xrefcount + 1));
+@@ -4702,7 +4782,7 @@
+ 		written += TIFFWriteFile(output, (tdata_t) "/Identity ] ", 12);
+ 	}
+ 
+-	written += TIFFWriteFile(output, (tdata_t) " >> \r", 5);
++	written += TIFFWriteFile(output, (tdata_t) " >> \n", 5);
+ 
+ 	return(written);
+ }
+@@ -4714,12 +4794,12 @@
+ 	int buflen=0;
+ 	(void)i; // XXX
+ 
+-	written += TIFFWriteFile(output, (tdata_t) "/FunctionType 0 \r", 17);
+-	written += TIFFWriteFile(output, (tdata_t) "/Domain [0.0 1.0] \r", 19);
+-	written += TIFFWriteFile(output, (tdata_t) "/Range [0.0 1.0] \r", 18);
+-	buflen=sprintf(buffer, "/Size [%u] \r", (1<<t2p->tiff_bitspersample));
++	written += TIFFWriteFile(output, (tdata_t) "/FunctionType 0 \n", 17);
++	written += TIFFWriteFile(output, (tdata_t) "/Domain [0.0 1.0] \n", 19);
++	written += TIFFWriteFile(output, (tdata_t) "/Range [0.0 1.0] \n", 18);
++	buflen=sprintf(buffer, "/Size [%u] \n", (1<<t2p->tiff_bitspersample));
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t) "/BitsPerSample 16 \r", 19);
++	written += TIFFWriteFile(output, (tdata_t) "/BitsPerSample 16 \n", 19);
+ 	written += t2p_write_pdf_stream_dict(1<<(t2p->tiff_bitspersample+1), 0, output);
+ 
+ 	return(written);
+@@ -4809,26 +4889,26 @@
+ 		Z_W /= Y_W;
+ 		Y_W = 1.0;
+ 	}
+-	written += TIFFWriteFile(output, (tdata_t) "<< \r", 4);
++	written += TIFFWriteFile(output, (tdata_t) "<< \n", 4);
+ 	if(t2p->pdf_colorspace & T2P_CS_CALGRAY){
+ 		written += TIFFWriteFile(output, (tdata_t) "/WhitePoint ", 12);
+-		buflen=sprintf(buffer, "[%.4f %.4f %.4f] \r", X_W, Y_W, Z_W);
++		buflen=sprintf(buffer, "[%.4f %.4f %.4f] \n", X_W, Y_W, Z_W);
+ 		written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-		written += TIFFWriteFile(output, (tdata_t) "/Gamma 2.2 \r", 12);
++		written += TIFFWriteFile(output, (tdata_t) "/Gamma 2.2 \n", 12);
+ 	}
+ 	if(t2p->pdf_colorspace & T2P_CS_CALRGB){
+ 		written += TIFFWriteFile(output, (tdata_t) "/WhitePoint ", 12);
+-		buflen=sprintf(buffer, "[%.4f %.4f %.4f] \r", X_W, Y_W, Z_W);
++		buflen=sprintf(buffer, "[%.4f %.4f %.4f] \n", X_W, Y_W, Z_W);
+ 		written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 		written += TIFFWriteFile(output, (tdata_t) "/Matrix ", 8);
+-		buflen=sprintf(buffer, "[%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f] \r", 
++		buflen=sprintf(buffer, "[%.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f %.4f] \n", 
+ 			X_R, Y_R, Z_R, 
+ 			X_G, Y_G, Z_G, 
+ 			X_B, Y_B, Z_B); 
+ 		written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-		written += TIFFWriteFile(output, (tdata_t) "/Gamma [2.2 2.2 2.2] \r", 22);
++		written += TIFFWriteFile(output, (tdata_t) "/Gamma [2.2 2.2 2.2] \n", 22);
+ 	}
+-	written += TIFFWriteFile(output, (tdata_t) ">>] \r", 5);
++	written += TIFFWriteFile(output, (tdata_t) ">>] \n", 5);
+ 
+ 	return(written);
+ }
+@@ -4846,7 +4926,7 @@
+ 	written += TIFFWriteFile(output, (tdata_t) "[/ICCBased ", 11);
+ 	buflen=sprintf(buffer, "%lu", (unsigned long)t2p->pdf_icccs);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t) " 0 R] \r", 7);
++	written += TIFFWriteFile(output, (tdata_t) " 0 R] \n", 7);
+ 
+ 	return(written);
+ }
+@@ -4858,7 +4938,7 @@
+ 	int buflen=0;
+ 	
+ 	written += TIFFWriteFile(output, (tdata_t) "/N ", 3);
+-	buflen=sprintf(buffer, "%u \r", t2p->tiff_samplesperpixel);
++	buflen=sprintf(buffer, "%u \n", t2p->tiff_samplesperpixel);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 	written += TIFFWriteFile(output, (tdata_t) "/Alternate ", 11);
+ 	t2p->pdf_colorspace ^= T2P_CS_ICCBASED;
+@@ -4910,7 +4990,7 @@
+ 	for (i=0;i<t2p->tiff_samplesperpixel;i++){
+ 		written += TIFFWriteFile(output, (tdata_t) "1 0 ", 4);
+ 	}
+-	written += TIFFWriteFile(output, (tdata_t) "]\r", 2);
++	written += TIFFWriteFile(output, (tdata_t) "]\n", 2);
+ 
+ 	return(written);
+ }
+@@ -4980,7 +5060,7 @@
+ 			if(t2p->pdf_switchdecode == 0){
+ 				written += TIFFWriteFile(output, (tdata_t) " /BlackIs1 true ", 16);
+ 			}
+-			written += TIFFWriteFile(output, (tdata_t) ">>\r", 3);
++			written += TIFFWriteFile(output, (tdata_t) ">>\n", 3);
+ 			break;
+ #endif
+ #ifdef JPEG_SUPPORT
+@@ -4989,7 +5069,7 @@
+ 
+ 			if(t2p->tiff_photometric != PHOTOMETRIC_YCBCR) {
+ 				written += TIFFWriteFile(output, (tdata_t) "/DecodeParms ", 13);
+-				written += TIFFWriteFile(output, (tdata_t) "<< /ColorTransform 0 >>\r", 24);
++				written += TIFFWriteFile(output, (tdata_t) "<< /ColorTransform 0 >>\n", 24);
+ 			}
+ 			break;
+ #endif
+@@ -5015,7 +5095,7 @@
+ 				_TIFFmemset(buffer, 0x00, 16);
+ 				buflen=sprintf(buffer, "%u", t2p->tiff_bitspersample);
+ 				written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-				written += TIFFWriteFile(output, (tdata_t) ">>\r", 3);
++				written += TIFFWriteFile(output, (tdata_t) ">>\n", 3);
+ 			}
+ 			break;
+ #endif
+@@ -5037,12 +5117,12 @@
+ 	int buflen=0;
+ 	uint32 i=0;
+ 
+-	written += TIFFWriteFile(output, (tdata_t) "xref\r0 ", 7);
++	written += TIFFWriteFile(output, (tdata_t) "xref\n0 ", 7);
+ 	buflen=sprintf(buffer, "%lu", (unsigned long)(t2p->pdf_xrefcount + 1));
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+-	written += TIFFWriteFile(output, (tdata_t) " \r0000000000 65535 f\r\n", 22);
++	written += TIFFWriteFile(output, (tdata_t) " \n0000000000 65535 f \n", 22);
+ 	for (i=0;i<t2p->pdf_xrefcount;i++){
+-		sprintf(buffer, "%.10lu 00000 n\r\n",
++		sprintf(buffer, "%.10lu 00000 n \n",
+ 			(unsigned long)t2p->pdf_xrefoffsets[i]);
+ 		written += TIFFWriteFile(output, (tdata_t) buffer, 20);
+ 	}
+@@ -5051,7 +5131,7 @@
+ }
+ 
+ /*
+- *	This function writes a PDF trailer to output.
++ * This function writes a PDF trailer to output.
+  */
+ 
+ tsize_t t2p_write_pdf_trailer(T2P* t2p, TIFF* output)
+@@ -5067,7 +5147,7 @@
+ 	((int*)fileidbuf)[1] = rand();
+ 	((int*)fileidbuf)[2] = rand();
+ 	((int*)fileidbuf)[3] = rand();
+-	t2p->pdf_fileid = (char*)_TIFFmalloc(33);
++	t2p->pdf_fileid = (unsigned char*)_TIFFmalloc(33);
+ 	if(t2p->pdf_fileid == NULL) {
+ 		TIFFError(
+ 			TIFF2PDF_MODULE, 
+@@ -5077,29 +5157,31 @@
+ 		return(0);
+ 	}
+ 	_TIFFmemset(t2p->pdf_fileid, 0x00, 33);
+-	for (i=0; i<16; i++)
+-		sprintf(&(t2p->pdf_fileid[2*i]), "%.2hhX", fileidbuf[i]);
+-	written += TIFFWriteFile(output, (tdata_t) "trailer\r<<\r/Size ", 17);
++	for (i = 0; i < 16; i++) {
++		sprintf((char *)t2p->pdf_fileid + 2 * i,
++			"%.2hhX", fileidbuf[i]);
++	}
++	written += TIFFWriteFile(output, (tdata_t) "trailer\n<<\n/Size ", 17);
+ 	buflen = sprintf(buffer, "%lu", (unsigned long)(t2p->pdf_xrefcount+1));
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 	_TIFFmemset(buffer, 0x00, 32);	
+-	written += TIFFWriteFile(output, (tdata_t) "\r/Root ", 7);
++	written += TIFFWriteFile(output, (tdata_t) "\n/Root ", 7);
+ 	buflen=sprintf(buffer, "%lu", (unsigned long)t2p->pdf_catalog);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 	_TIFFmemset(buffer, 0x00, 32);	
+-	written += TIFFWriteFile(output, (tdata_t) " 0 R \r/Info ", 12);
++	written += TIFFWriteFile(output, (tdata_t) " 0 R \n/Info ", 12);
+ 	buflen=sprintf(buffer, "%lu", (unsigned long)t2p->pdf_info);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 	_TIFFmemset(buffer, 0x00, 32);	
+-	written += TIFFWriteFile(output, (tdata_t) " 0 R \r/ID[<", 11);
++	written += TIFFWriteFile(output, (tdata_t) " 0 R \n/ID[<", 11);
+ 	written += TIFFWriteFile(output, (tdata_t) t2p->pdf_fileid, 32);
+ 	written += TIFFWriteFile(output, (tdata_t) "><", 2);
+ 	written += TIFFWriteFile(output, (tdata_t) t2p->pdf_fileid, 32);
+-	written += TIFFWriteFile(output, (tdata_t) ">]\r>>\rstartxref\r", 16);
++	written += TIFFWriteFile(output, (tdata_t) ">]\n>>\nstartxref\n", 16);
+ 	buflen=sprintf(buffer, "%lu", (unsigned long)t2p->pdf_startxref);
+ 	written += TIFFWriteFile(output, (tdata_t) buffer, buflen);
+ 	_TIFFmemset(buffer, 0x00, 32);	
+-	written += TIFFWriteFile(output, (tdata_t) "\r%%EOF\r", 7);
++	written += TIFFWriteFile(output, (tdata_t) "\n%%EOF\n", 7);
+ 
+ 	return(written);
+ }
+diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/tools/tiffsplit.c src/tiff-3.8.2/tools/tiffsplit.c
+--- origsrc/tiff-3.8.2/tools/tiffsplit.c	2005-12-07 03:48:33.000000000 -0600
++++ src/tiff-3.8.2/tools/tiffsplit.c	2006-08-13 18:06:06.318125000 -0500
+@@ -61,14 +61,13 @@
+ 		return (-3);
+ 	}
+ 	if (argc > 2)
+-		strcpy(fname, argv[2]);
++		snprintf(fname, sizeof(fname), "%s", argv[2]);
+ 	in = TIFFOpen(argv[1], "r");
+ 	if (in != NULL) {
+ 		do {
+ 			char path[1024+1];
+ 			newfilename();
+-			strcpy(path, fname);
+-			strcat(path, ".tif");
++			snprintf(path, sizeof(path), "%s.tif", fname);
+ 			out = TIFFOpen(path, TIFFIsBigEndian(in)?"wb":"wl");
+ 			if (out == NULL)
+ 				return (-2);

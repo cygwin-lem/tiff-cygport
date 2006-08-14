@@ -1,0 +1,22 @@
+DESCRIPTION="Library for manipulation of TIFF (Tag Image File Format) images"
+HOMEPAGE="http://www.libtiff.org/"
+SRC_URI="ftp://ftp.remotesensing.org/pub/libtiff/${P}.tar.gz"
+
+PKG_NAMES="tiff libtiff5 libtiff-devel tiff-doc"
+PKG_HINTS="setup runtime devel doc"
+PKG_CONTENTS[0]='--exclude=html usr/bin/*.exe usr/share/doc/ usr/share/man/man1/'
+PKG_CONTENTS[1]='usr/bin/*.dll'
+PKG_CONTENTS[2]='usr/include/ usr/lib/'
+PKG_CONTENTS[3]="usr/share/doc/${P}/html/ usr/share/man/man3/"
+
+DIFF_EXCLUDES="m4"
+
+src_compile() {
+	cd ${S}
+	rm -f m4/libtool.m4 m4/lt*.m4
+	cygautoreconf
+	cd ${B}
+	cygconf --enable-cxx --enable-jpeg --enable-zlib --disable-rpath \
+		--with-x --with-docdir=/usr/share/doc/${P}
+	cygmake
+}
