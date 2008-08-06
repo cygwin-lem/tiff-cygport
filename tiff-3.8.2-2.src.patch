@@ -1,4 +1,3 @@
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/configure.ac src/tiff-3.8.2/configure.ac
 --- origsrc/tiff-3.8.2/configure.ac	2006-03-23 08:36:40.000000000 -0600
 +++ src/tiff-3.8.2/configure.ac	2006-08-13 18:08:28.521250000 -0500
 @@ -55,6 +55,9 @@
@@ -11,7 +10,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
      *)
  	LIBTIFF_VERSION_INFO=$LIBTIFF_MAJOR_VERSION:$LIBTIFF_MINOR_VERSION:$LIBTIFF_MICRO_VERSION$LIBTIFF_ALPHA_VERSION
  	;;
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/Makefile.am src/tiff-3.8.2/libtiff/Makefile.am
 --- origsrc/tiff-3.8.2/libtiff/Makefile.am	2006-03-23 08:31:53.000000000 -0600
 +++ src/tiff-3.8.2/libtiff/Makefile.am	2006-08-13 18:06:06.146250000 -0500
 @@ -121,7 +121,7 @@
@@ -31,7 +29,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
 +faxtable: mkg3states$(EXEEXT)
  	(rm -f tif_fax3sm.c && ./mkg3states -b -c const tif_fax3sm.c)
  
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_config.h.in src/tiff-3.8.2/libtiff/tif_config.h.in
 --- origsrc/tiff-3.8.2/libtiff/tif_config.h.in	2006-01-23 12:22:32.000000000 -0600
 +++ src/tiff-3.8.2/libtiff/tif_config.h.in	2006-08-13 18:06:06.177500000 -0500
 @@ -149,10 +149,6 @@
@@ -45,7 +42,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
  /* Support LZW algorithm */
  #undef LZW_SUPPORT
  
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_dir.c src/tiff-3.8.2/libtiff/tif_dir.c
 --- origsrc/tiff-3.8.2/libtiff/tif_dir.c	2006-03-21 10:42:50.000000000 -0600
 +++ src/tiff-3.8.2/libtiff/tif_dir.c	2006-08-13 18:06:57.833750000 -0500
 @@ -122,6 +122,7 @@
@@ -138,7 +134,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
                  ret_val = 0;
                  break;
              }
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_dirinfo.c src/tiff-3.8.2/libtiff/tif_dirinfo.c
 --- origsrc/tiff-3.8.2/libtiff/tif_dirinfo.c	2006-02-07 07:51:03.000000000 -0600
 +++ src/tiff-3.8.2/libtiff/tif_dirinfo.c	2006-08-13 18:06:57.849375000 -0500
 @@ -775,7 +775,8 @@
@@ -161,7 +156,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
  		/*NOTREACHED*/
  	}
  	return (fip);
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_dirread.c src/tiff-3.8.2/libtiff/tif_dirread.c
 --- origsrc/tiff-3.8.2/libtiff/tif_dirread.c	2006-03-21 10:42:50.000000000 -0600
 +++ src/tiff-3.8.2/libtiff/tif_dirread.c	2006-08-13 18:06:57.880625000 -0500
 @@ -29,6 +29,9 @@
@@ -481,7 +475,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
                      goto bad;
                  }
              *pl = v[0];
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_fax3.c src/tiff-3.8.2/libtiff/tif_fax3.c
 --- origsrc/tiff-3.8.2/libtiff/tif_fax3.c	2006-03-21 10:42:50.000000000 -0600
 +++ src/tiff-3.8.2/libtiff/tif_fax3.c	2006-08-13 18:06:57.896250000 -0500
 @@ -1136,6 +1136,7 @@
@@ -507,7 +500,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
  	tif->tif_flags |= TIFF_DIRTYDIRECT;
  	return (1);
  }
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_jpeg.c src/tiff-3.8.2/libtiff/tif_jpeg.c
 --- origsrc/tiff-3.8.2/libtiff/tif_jpeg.c	2006-03-21 10:42:50.000000000 -0600
 +++ src/tiff-3.8.2/libtiff/tif_jpeg.c	2006-08-13 18:06:57.911875000 -0500
 @@ -722,15 +722,31 @@
@@ -627,7 +619,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
  
  	(void) flags;
  	if (TIFFFieldSet(tif,FIELD_JPEGTABLES))
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_next.c src/tiff-3.8.2/libtiff/tif_next.c
 --- origsrc/tiff-3.8.2/libtiff/tif_next.c	2005-12-21 06:33:56.000000000 -0600
 +++ src/tiff-3.8.2/libtiff/tif_next.c	2006-08-13 18:06:57.927500000 -0500
 @@ -105,11 +105,16 @@
@@ -648,7 +639,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
  					SETPIXEL(op, grey);
  				if (npixels >= (int) imagewidth)
  					break;
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_pixarlog.c src/tiff-3.8.2/libtiff/tif_pixarlog.c
 --- origsrc/tiff-3.8.2/libtiff/tif_pixarlog.c	2006-03-21 10:42:50.000000000 -0600
 +++ src/tiff-3.8.2/libtiff/tif_pixarlog.c	2006-08-13 18:06:57.943125000 -0500
 @@ -768,7 +768,19 @@
@@ -672,7 +662,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
  		switch (sp->user_datafmt)  {
  		case PIXARLOGDATAFMT_FLOAT:
  			horizontalAccumulateF(up, llen, sp->stride,
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/libtiff/tif_read.c src/tiff-3.8.2/libtiff/tif_read.c
 --- origsrc/tiff-3.8.2/libtiff/tif_read.c	2005-12-21 06:33:56.000000000 -0600
 +++ src/tiff-3.8.2/libtiff/tif_read.c	2006-08-13 18:06:57.958750000 -0500
 @@ -31,6 +31,8 @@
@@ -714,7 +703,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
  			tif->tif_curtile = NOTILE;
  			return (0);
  		}
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/tools/Makefile.am src/tiff-3.8.2/tools/Makefile.am
 --- origsrc/tiff-3.8.2/tools/Makefile.am	2006-03-23 08:31:53.000000000 -0600
 +++ src/tiff-3.8.2/tools/Makefile.am	2006-08-13 18:06:06.224375000 -0500
 @@ -23,7 +23,6 @@
@@ -823,7 +811,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
  
  INCLUDES = -I$(top_srcdir)/libtiff
  
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/tools/tiff2pdf.c src/tiff-3.8.2/tools/tiff2pdf.c
 --- origsrc/tiff-3.8.2/tools/tiff2pdf.c	2006-03-21 10:42:51.000000000 -0600
 +++ src/tiff-3.8.2/tools/tiff2pdf.c	2006-08-13 18:06:06.318125000 -0500
 @@ -38,6 +38,14 @@
@@ -2288,7 +2275,6 @@ diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depco
  
  	return(written);
  }
-diff -urN -x CYGWIN-PATCHES -x 'aclocal.m4*' -x ltmain.sh -x 'config.*' -x depcomp -x install-sh -x missing -x mkinstalldirs -x autom4te.cache -x '*compile' -x 'intltool*.in' -x 'xml-i18n-*.in' -x '*.pyc' -x '*.mo' -x '*.gmo' -x ABOUT-NLS -x Makevars.template -x COPYING -x INSTALL -x '*.orig' -x '*.rej' -x '*~' -x '*.temp' -x texinfo.tex -x ylwrap -x 'Makefile.in*' -x configure -x gnome-doc-utils.make -x intltool.m4 -x omf.make -x xmldocs.make -x m4 origsrc/tiff-3.8.2/tools/tiffsplit.c src/tiff-3.8.2/tools/tiffsplit.c
 --- origsrc/tiff-3.8.2/tools/tiffsplit.c	2005-12-07 03:48:33.000000000 -0600
 +++ src/tiff-3.8.2/tools/tiffsplit.c	2006-08-13 18:06:06.318125000 -0500
 @@ -61,14 +61,13 @@
