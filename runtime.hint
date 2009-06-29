@@ -1,5 +1,5 @@
 category: Graphics Libs
-requires: cygwin libjpeg62 zlib
+requires: libjpeg62 zlib
 external-source: tiff
 sdesc: "TIFF image library (runtime)"
 ldesc: "Included in this software distribution is a library, libtiff, for
