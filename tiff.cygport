@@ -1,0 +1,38 @@
+NAME="tiff"
+VERSION=3.9.7
+RELEASE=1
+CATEGORY="Graphics"
+SUMMARY="TIFF image library"
+DESCRIPTION="Included in this software distribution is a library, libtiff, for
+reading and writing TIFF images, a small collection of tools for doing
+simple manipulations of TIFF images on UNIX systems, and documentation
+on the library and tools."
+HOMEPAGE="http://www.libtiff.org/"
+SRC_URI="ftp://ftp.remotesensing.org/pub/libtiff/tiff-${VERSION}.tar.gz"
+PATCH_URI="
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-4447.patch?h=f17
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-4564.patch?h=f17
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-5581.patch?h=f17
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-printdir-width.patch?h=f17
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-tiffinfo-exif.patch?h=f17
+	libtiff-3.9.2-cygwin.patch
+	libtiff-3.9.2-libport.patch
+	libtiff-3.9.2-soname.patch
+"
+
+PKG_NAMES="tiff libtiff5 libtiff-devel tiff-doc tiff-opengl"
+tiff_CONTENTS='--exclude=html --exclude=tiffgt.* usr/bin/*.exe usr/share/doc/ usr/share/man/man1/'
+libtiff5_CONTENTS="usr/bin/cygtiff*-5.dll"
+libtiff_devel_CONTENTS='usr/include/ usr/lib/'
+tiff_doc_CONTENTS="usr/share/doc/${NAME}/html/ usr/share/man/man3/"
+tiff_opengl_CONTENTS="usr/bin/tiffgt.exe usr/share/man/man1/tiffgt.*"
+
+#DIFF_EXCLUDES="m4"
+
+CYGCONF_ARGS="
+	--enable-cxx
+	--enable-jpeg
+	--enable-zlib
+	--with-x
+	--with-docdir=/usr/share/doc/${NAME}
+"
