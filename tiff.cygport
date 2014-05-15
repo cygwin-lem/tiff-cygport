@@ -1,6 +1,6 @@
 NAME="tiff"
 VERSION=3.9.7
-RELEASE=1
+RELEASE=4
 CATEGORY="Graphics"
 SUMMARY="TIFF image library"
 DESCRIPTION="Included in this software distribution is a library, libtiff, for
@@ -13,11 +13,20 @@ PATCH_URI="
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-4447.patch?h=f17
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-4564.patch?h=f17
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-5581.patch?h=f17
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-1960.patch
+	https://bugzilla.redhat.com/attachment.cgi?id=736472#/libtiff39-CVE-2013-1961.patch
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4231.patch
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4232.patch
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4244.patch
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-printdir-width.patch?h=f17
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-tiffinfo-exif.patch?h=f17
 	libtiff-3.9.2-cygwin.patch
 	libtiff-3.9.2-libport.patch
 	libtiff-3.9.2-soname.patch
+	libtiff-3.9.6-man-errors.patch
+	revert-tiffdump-breakage-from-3.9.5.patch
+	libtiff-3.9.7-binmode.patch
+	libtiff-3.9.7-exeext.patch
 "
 
 PKG_NAMES="tiff libtiff5 libtiff-devel tiff-doc tiff-opengl"
