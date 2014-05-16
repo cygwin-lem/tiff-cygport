@@ -2,7 +2,7 @@ NAME="tiff"
 VERSION=3.9.7
 RELEASE=4
 CATEGORY="Graphics"
-SUMMARY="TIFF image library"
+SUMMARY="TIFF image utilities"
 DESCRIPTION="Included in this software distribution is a library, libtiff, for
 reading and writing TIFF images, a small collection of tools for doing
 simple manipulations of TIFF images on UNIX systems, and documentation
@@ -31,9 +31,16 @@ PATCH_URI="
 
 PKG_NAMES="tiff libtiff5 libtiff-devel tiff-doc tiff-opengl"
 tiff_CONTENTS='--exclude=html --exclude=tiffgt.* usr/bin/*.exe usr/share/doc/ usr/share/man/man1/'
+libtiff5_CATEGORY="Libs"
+libtiff5_SUMMARY="TIFF image library"
 libtiff5_CONTENTS="usr/bin/cygtiff*-5.dll"
+libtiff_devel_CATEGORY="Libs"
+libtiff_devel_SUMMARY="TIFF image library"
 libtiff_devel_CONTENTS='usr/include/ usr/lib/'
+tiff_doc_CATEGORY="Doc"
+tiff_doc_SUMMARY="TIFF image library (documentation)"
 tiff_doc_CONTENTS="usr/share/doc/${NAME}/html/ usr/share/man/man3/"
+tiff_opengl_SUMMARY="TIFF image viewer"
 tiff_opengl_CONTENTS="usr/bin/tiffgt.exe usr/share/man/man1/tiffgt.*"
 
 #DIFF_EXCLUDES="m4"
