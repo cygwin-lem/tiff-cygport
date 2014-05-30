@@ -1,6 +1,6 @@
 NAME="tiff"
-VERSION=3.9.7
-RELEASE=4
+VERSION=4.0.3
+RELEASE=2
 CATEGORY="Graphics"
 SUMMARY="TIFF image utilities"
 DESCRIPTION="Included in this software distribution is a library, libtiff, for
@@ -10,30 +10,30 @@ on the library and tools."
 HOMEPAGE="http://www.libtiff.org/"
 SRC_URI="ftp://ftp.remotesensing.org/pub/libtiff/tiff-${VERSION}.tar.gz"
 PATCH_URI="
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-4447.patch?h=f17
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-4564.patch?h=f17
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-5581.patch?h=f17
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-4447.patch
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-4564.patch
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-printdir-width.patch
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-jpeg-test.patch
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-1960.patch
-	https://bugzilla.redhat.com/attachment.cgi?id=736472#/libtiff39-CVE-2013-1961.patch
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-1961.patch
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-manpage-update.patch
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4231.patch
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4232.patch
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4244.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-printdir-width.patch?h=f17
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-tiffinfo-exif.patch?h=f17
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-make-check.patch
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4243.patch
 	libtiff-3.9.2-cygwin.patch
 	libtiff-3.9.2-libport.patch
-	libtiff-3.9.2-soname.patch
-	libtiff-3.9.6-man-errors.patch
-	revert-tiffdump-breakage-from-3.9.5.patch
+	libtiff-4.0.3-soname.patch
 	libtiff-3.9.7-binmode.patch
 	libtiff-3.9.7-exeext.patch
 "
 
-PKG_NAMES="tiff libtiff5 libtiff-devel tiff-doc tiff-opengl"
+PKG_NAMES="tiff libtiff6 libtiff-devel tiff-doc tiff-opengl"
 tiff_CONTENTS='--exclude=html --exclude=tiffgt.* usr/bin/*.exe usr/share/doc/ usr/share/man/man1/'
-libtiff5_CATEGORY="Libs"
-libtiff5_SUMMARY="TIFF image library"
-libtiff5_CONTENTS="usr/bin/cygtiff*-5.dll"
+libtiff6_CATEGORY="Libs"
+libtiff6_SUMMARY="TIFF image library"
+libtiff6_CONTENTS="usr/bin/cygtiff*-6.dll"
 libtiff_devel_CATEGORY="Libs"
 libtiff_devel_SUMMARY="TIFF image library"
 libtiff_devel_CONTENTS='usr/include/ usr/lib/'
@@ -45,10 +45,14 @@ tiff_opengl_CONTENTS="usr/bin/tiffgt.exe usr/share/man/man1/tiffgt.*"
 
 #DIFF_EXCLUDES="m4"
 
+# make sure GLX is found instead of WGL
 CYGCONF_ARGS="
 	--enable-cxx
 	--enable-jpeg
 	--enable-zlib
 	--with-x
 	--with-docdir=/usr/share/doc/${NAME}
+	ac_cv_header_windows_h=no
+	ax_cv_check_gl_libgl=-lGL
+	ax_cv_check_glu_libglu=-lGLU
 "
