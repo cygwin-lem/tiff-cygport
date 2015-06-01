@@ -1,6 +1,6 @@
 NAME="tiff"
 VERSION=4.0.3
-RELEASE=2
+RELEASE=3
 CATEGORY="Graphics"
 SUMMARY="TIFF image utilities"
 DESCRIPTION="Included in this software distribution is a library, libtiff, for
@@ -22,8 +22,9 @@ PATCH_URI="
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4244.patch
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-make-check.patch
 	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4243.patch
+	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2014-9655.patch
 	libtiff-3.9.2-cygwin.patch
-	libtiff-3.9.2-libport.patch
+	libtiff-4.0.3-libport.patch
 	libtiff-4.0.3-soname.patch
 	libtiff-3.9.7-binmode.patch
 	libtiff-3.9.7-exeext.patch
