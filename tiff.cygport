@@ -1,6 +1,6 @@
 NAME="tiff"
-VERSION=4.0.3
-RELEASE=3
+VERSION=4.0.6
+RELEASE=1
 CATEGORY="Graphics"
 SUMMARY="TIFF image utilities"
 DESCRIPTION="Included in this software distribution is a library, libtiff, for
@@ -10,19 +10,6 @@ on the library and tools."
 HOMEPAGE="http://www.libtiff.org/"
 SRC_URI="ftp://ftp.remotesensing.org/pub/libtiff/tiff-${VERSION}.tar.gz"
 PATCH_URI="
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-4447.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2012-4564.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-printdir-width.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-jpeg-test.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-1960.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-1961.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-manpage-update.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4231.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4232.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4244.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-make-check.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2013-4243.patch
-	http://pkgs.fedoraproject.org/cgit/libtiff.git/plain/libtiff-CVE-2014-9655.patch
 	libtiff-3.9.2-cygwin.patch
 	libtiff-4.0.3-libport.patch
 	libtiff-4.0.3-soname.patch
