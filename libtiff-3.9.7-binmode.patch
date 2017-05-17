@@ -9,26 +9,6 @@
      if (fd == NULL) {
  	fprintf(stderr, "%s: %s: Cannot create output file.\n",
  	    argv[0], outputfile);
---- origsrc/tiff-3.9.7/tools/sgi2tiff.c	2010-06-08 14:50:44.000000000 -0400
-+++ src/tiff-3.9.7/tools/sgi2tiff.c	2013-04-24 01:23:36.060880600 -0400
-@@ -94,7 +94,7 @@ main(int argc, char* argv[])
- 		}
- 	if (argc - optind != 2)
- 		usage();
--	in = iopen(argv[optind], "r");
-+	in = iopen(argv[optind], "rb");
- 	if (in == NULL)
- 		return (-1);
- 	out = TIFFOpen(argv[optind+1], "w");
-@@ -160,7 +160,7 @@ processCompressOptions(char* opt)
- 	else if (strneq(opt, "jpeg", 4)) {
- 		char* cp = strchr(opt, ':');
- 
--                defcompression = COMPRESSION_JPEG;
-+                compression = COMPRESSION_JPEG;
-                 while( cp )
-                 {
-                     if (isdigit((int)cp[1]))
 --- origsrc/tiff-3.9.7/tools/tiff2pdf.c	2012-09-22 10:48:09.000000000 -0400
 +++ src/tiff-3.9.7/tools/tiff2pdf.c	2013-04-24 01:23:36.065880900 -0400
 @@ -767,6 +767,9 @@ int main(int argc, char** argv){

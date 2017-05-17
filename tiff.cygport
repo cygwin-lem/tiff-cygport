@@ -1,5 +1,5 @@
 NAME="tiff"
-VERSION=4.0.6
+VERSION=4.0.7
 RELEASE=1
 CATEGORY="Graphics"
 SUMMARY="TIFF image utilities"
@@ -7,9 +7,26 @@ DESCRIPTION="Included in this software distribution is a library, libtiff, for
 reading and writing TIFF images, a small collection of tools for doing
 simple manipulations of TIFF images on UNIX systems, and documentation
 on the library and tools."
-HOMEPAGE="http://www.libtiff.org/"
-SRC_URI="ftp://ftp.remotesensing.org/pub/libtiff/tiff-${VERSION}.tar.gz"
+HOMEPAGE="http://www.simplesystems.org/libtiff/"
+SRC_URI="ftp://ftp.simplesystems.org/pub/libtiff/tiff-${VERSION}.tar.gz"
 PATCH_URI="
+	fedora/libtiff-am-version.patch
+	fedora/libtiff-hylafax-fix.patch
+	fedora/libtiff-make-check.patch
+	fedora/libtiff-CVE-2016-10266.patch
+	fedora/libtiff-CVE-2016-10267.patch
+	fedora/libtiff-CVE-2016-10268.patch
+	fedora/libtiff-CVE-2016-10269.patch
+	fedora/libtiff-CVE-2016-10270.patch
+	fedora/libtiff-CVE-2016-10271_10272.patch
+	fedora/libtiff-CVE-2017-7592.patch
+	fedora/libtiff-CVE-2017-7593.patch
+	fedora/libtiff-CVE-2017-7594.patch
+	fedora/libtiff-CVE-2017-7595.patch
+	fedora/libtiff-CVE-2017-7596_7597_7599_7600.patch
+	fedora/libtiff-CVE-2017-7598.patch
+	fedora/libtiff-CVE-2017-7601.patch
+	fedora/libtiff-CVE-2017-7602.patch
 	libtiff-3.9.2-cygwin.patch
 	libtiff-4.0.3-libport.patch
 	libtiff-4.0.3-soname.patch
