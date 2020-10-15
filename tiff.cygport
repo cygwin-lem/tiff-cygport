@@ -1,6 +1,12 @@
+################################
+inherit cmake
+
+################################
 NAME="tiff"
-VERSION=4.0.9
+VERSION=4.1.0
 RELEASE=1
+
+################################
 CATEGORY="Graphics"
 SUMMARY="TIFF image utilities"
 DESCRIPTION="Included in this software distribution is a library, libtiff, for
@@ -8,10 +14,42 @@ reading and writing TIFF images, a small collection of tools for doing
 simple manipulations of TIFF images on UNIX systems, and documentation
 on the library and tools."
 HOMEPAGE="http://www.simplesystems.org/libtiff/"
-SRC_URI="ftp://ftp.simplesystems.org/pub/libtiff/tiff-${VERSION}.tar.gz"
-PATCH_URI="
-	fedora/libtiff-am-version.patch
-	fedora/libtiff-make-check.patch
+
+################################
+## Source from a git repository
+################################
+GIT_REPO="https://gitlab.com/libtiff/libtiff"
+declare -A GIT_DATEHASH_BY_NAME=(
+  [4.1.0p208]=2020-10-14T14:39:50+02:00/ac64d74b # dffd844f35f7efd5afaeb1dce8e0c163
+  [4.1.0]=2019-11-03T14:15:37-06:00/e0d707dc #1524d8c0e20f03396f234e0f1b07b3f4
+)
+
+REV_HASH="${GIT_DATEHASH_BY_NAME[${VERSION}]#*/}"
+REV_DATE="${GIT_DATEHASH_BY_NAME[${VERSION}]%/*}"
+REV_DATE_SHORT="${GIT_DATEHASH_BY_NAME[${VERSION}]%T*}"
+GIT_BASENAME="${GIT_REPO##*/}"
+#SRC_URI="${GIT_REPO}/archive/${REV_HASH}.tar.gz"   # GitHub
+SRC_URI="${GIT_REPO}/-/archive/${REV_HASH}/${GIT_BASENAME}-${REV_HASH}.tar.bz2" # GitLab
+SRC_DIR="${GIT_BASENAME}-${REV_HASH}"
+
+# echo "${GIT_REPO}"
+# echo "CommitHash: ${REV_HASH}"
+# echo "CommitDate: ${REV_DATE}"
+# echo "CommitDate (short): ${REV_DATE_SHORT}"
+# echo "VERSION: ${VERSION}"
+
+################################
+## Patch files
+################################
+# Patch filenames are in a default style of 'git format-patch'
+PATCH_URI=$(\
+  find -maxdepth 1 -type f -name '[0-9][0-9][0-9][0-9]-*.patch' \
+  | sort \
+)
+# Additional patches, if any
+#	fedora/libtiff-am-version.patch
+#	fedora/libtiff-make-check.patch
+PATCH_URI+="\
 	libtiff-3.9.2-cygwin.patch
 	libtiff-4.0.3-libport.patch
 	libtiff-4.0.3-soname.patch
@@ -19,6 +57,41 @@ PATCH_URI="
 	libtiff-3.9.7-exeext.patch
 "
 
+################################
+## Settings for Inkscape
+################################
+
+# : ${CYGCMAKE_GENERATOR=Unix Makefiles}
+
+CYGCMAKE_ARGS="
+  -DCYGWIN:BOOL=ON
+  -DBUILD_SHARED_LIBS:BOOL=ON
+"
+CYGCMAKE_ARGS+="
+"
+
+BUILD_REQUIRES="\
+  pkg-config\
+  cmake\
+  ninja\
+\
+  libjpeg-devel\
+  libpng-devel\
+  libjbig-devel\
+  zlib-devel\
+  libwebp-devel\
+  liblzma-devel\
+  libzstd-devel\
+  libGL-devel\
+  libGLU-devel\
+  libglut-devel\
+"
+
+################################
+## ABI for libtiff
+ABI=6
+
+################################
 PKG_NAMES="tiff libtiff6 libtiff-devel tiff-doc tiff-opengl"
 tiff_CONTENTS='--exclude=html --exclude=tiffgt.* usr/bin/*.exe usr/share/doc/ usr/share/man/man1/'
 libtiff6_CATEGORY="Libs"
@@ -36,13 +109,13 @@ tiff_opengl_CONTENTS="usr/bin/tiffgt.exe usr/share/man/man1/tiffgt.*"
 #DIFF_EXCLUDES="m4"
 
 # make sure GLX is found instead of WGL
-CYGCONF_ARGS="
-	--enable-cxx
-	--enable-jpeg
-	--enable-zlib
-	--with-x
-	--with-docdir=/usr/share/doc/${NAME}
-	ac_cv_header_windows_h=no
-	ax_cv_check_gl_libgl=-lGL
-	ax_cv_check_glu_libglu=-lGLU
-"
+#CYGCONF_ARGS="
+#	--enable-cxx
+#	--enable-jpeg
+#	--enable-zlib
+#	--with-x
+#	--with-docdir=/usr/share/doc/${NAME}
+#	ac_cv_header_windows_h=no
+#	ax_cv_check_gl_libgl=-lGL
+#	ax_cv_check_glu_libglu=-lGLU
+#"
