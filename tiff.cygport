@@ -3,7 +3,7 @@ inherit cmake
 
 ################################
 NAME="tiff"
-VERSION=4.1.0
+VERSION=4.2.0
 RELEASE=1
 
 ################################
@@ -20,7 +20,8 @@ HOMEPAGE="http://www.simplesystems.org/libtiff/"
 ################################
 GIT_REPO="https://gitlab.com/libtiff/libtiff"
 declare -A GIT_DATEHASH_BY_NAME=(
-  [4.1.0p208]=2020-10-14T14:39:50+02:00/ac64d74b # dffd844f35f7efd5afaeb1dce8e0c163
+  # git log --date=iso-strict --format='%cd/%H' -1
+  [4.2.0]=2020-12-19T12:44:58-06:00/4862b0d7 #bcc786304ff4e8c31e8d5ccfb868fb99
   [4.1.0]=2019-11-03T14:15:37-06:00/e0d707dc #1524d8c0e20f03396f234e0f1b07b3f4
 )
 
@@ -32,12 +33,6 @@ GIT_BASENAME="${GIT_REPO##*/}"
 SRC_URI="${GIT_REPO}/-/archive/${REV_HASH}/${GIT_BASENAME}-${REV_HASH}.tar.bz2" # GitLab
 SRC_DIR="${GIT_BASENAME}-${REV_HASH}"
 
-# echo "${GIT_REPO}"
-# echo "CommitHash: ${REV_HASH}"
-# echo "CommitDate: ${REV_DATE}"
-# echo "CommitDate (short): ${REV_DATE_SHORT}"
-# echo "VERSION: ${VERSION}"
-
 ################################
 ## Patch files
 ################################
@@ -46,15 +41,12 @@ PATCH_URI=$(\
   find -maxdepth 1 -type f -name '[0-9][0-9][0-9][0-9]-*.patch' \
   | sort \
 )
-# Additional patches, if any
-#	fedora/libtiff-am-version.patch
-#	fedora/libtiff-make-check.patch
 PATCH_URI+="\
-	libtiff-3.9.2-cygwin.patch
-	libtiff-4.0.3-libport.patch
-	libtiff-4.0.3-soname.patch
-	libtiff-3.9.7-binmode.patch
-	libtiff-3.9.7-exeext.patch
+  libtiff-3.9.2-cygwin.patch
+  libtiff-4.0.3-libport.patch
+  libtiff-4.0.3-soname.patch
+  libtiff-3.9.7-binmode.patch
+  libtiff-3.9.7-exeext.patch
 "
 
 ################################
@@ -67,8 +59,6 @@ CYGCMAKE_ARGS="
   -DCYGWIN:BOOL=ON
   -DBUILD_SHARED_LIBS:BOOL=ON
 "
-CYGCMAKE_ARGS+="
-"
 
 BUILD_REQUIRES="\
   pkg-config\
@@ -79,6 +69,7 @@ BUILD_REQUIRES="\
   libpng-devel\
   libjbig-devel\
   zlib-devel\
+  libdeflate-devel\
   libwebp-devel\
   liblzma-devel\
   libzstd-devel\
@@ -92,6 +83,7 @@ BUILD_REQUIRES="\
 ABI=6
 
 ################################
+## Packages
 PKG_NAMES="tiff libtiff6 libtiff-devel tiff-doc tiff-opengl"
 tiff_CONTENTS='--exclude=html --exclude=tiffgt.* usr/bin/*.exe usr/share/doc/ usr/share/man/man1/'
 libtiff6_CATEGORY="Libs"
@@ -106,16 +98,11 @@ tiff_doc_CONTENTS="usr/share/doc/${NAME}/html/ usr/share/man/man3/"
 tiff_opengl_SUMMARY="TIFF image viewer"
 tiff_opengl_CONTENTS="usr/bin/tiffgt.exe usr/share/man/man1/tiffgt.*"
 
-#DIFF_EXCLUDES="m4"
+################################
+## Test
+src_test() {
+  cd ${B}
+  ctest
+}
 
-# make sure GLX is found instead of WGL
-#CYGCONF_ARGS="
-#	--enable-cxx
-#	--enable-jpeg
-#	--enable-zlib
-#	--with-x
-#	--with-docdir=/usr/share/doc/${NAME}
-#	ac_cv_header_windows_h=no
-#	ax_cv_check_gl_libgl=-lGL
-#	ax_cv_check_glu_libglu=-lGLU
-#"
+################################
