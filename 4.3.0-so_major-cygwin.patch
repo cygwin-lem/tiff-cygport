@@ -1,0 +1,11 @@
+--- origsrc/libtiff-v4.3.0/cmake/AutotoolsVersion.cmake	2021-04-16 19:54:59.000000000 +0900
++++ src/libtiff-v4.3.0/cmake/AutotoolsVersion.cmake
+@@ -41,7 +41,7 @@
+ set(LIBTIFF_VERSION_FULL "${LIBTIFF_VERSION}${LIBTIFF_ALPHA_VERSION}")
+ 
+ # Convert the libtool version variables to proper major and minor versions
+-math(EXPR SO_MAJOR "${LIBTIFF_CURRENT} - ${LIBTIFF_AGE}")
++math(EXPR SO_MAJOR "${LIBTIFF_CURRENT} - ${LIBTIFF_AGE} + 1")
+ set(SO_MINOR "${LIBTIFF_AGE}")
+ set(SO_REVISION "${LIBTIFF_REVISION}")
+ 

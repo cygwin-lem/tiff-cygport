@@ -3,7 +3,7 @@ inherit cmake
 
 ################################
 NAME="tiff"
-VERSION=4.2.0
+VERSION=4.3.0
 RELEASE=1
 
 ################################
@@ -21,8 +21,9 @@ HOMEPAGE="http://www.simplesystems.org/libtiff/"
 GIT_REPO="https://gitlab.com/libtiff/libtiff"
 declare -A GIT_DATEHASH_BY_NAME=(
   # git log --date=iso-strict --format='%cd/%H' -1
-  [4.2.0]=2020-12-19T12:44:58-06:00/4862b0d7 #bcc786304ff4e8c31e8d5ccfb868fb99
-  [4.1.0]=2019-11-03T14:15:37-06:00/e0d707dc #1524d8c0e20f03396f234e0f1b07b3f4
+  [4.3.0]=2021-04-16T12:54:59+02:00/v4.3.0
+  [4.2.0]=2020-12-19T12:44:58-06:00/v4.2.0
+  [4.1.0]=2019-11-03T14:15:37-06:00/v4.1.0
 )
 
 REV_HASH="${GIT_DATEHASH_BY_NAME[${VERSION}]#*/}"
@@ -42,11 +43,10 @@ PATCH_URI=$(\
   | sort \
 )
 PATCH_URI+="\
-  libtiff-3.9.2-cygwin.patch
-  libtiff-4.0.3-libport.patch
-  libtiff-4.0.3-soname.patch
-  libtiff-3.9.7-binmode.patch
-  libtiff-3.9.7-exeext.patch
+  3.9.2-cygwin.patch
+  3.9.7-binmode.patch
+  3.9.7-exeext.patch
+  4.3.0-so_major-cygwin.patch
 "
 
 ################################
@@ -58,6 +58,7 @@ PATCH_URI+="\
 CYGCMAKE_ARGS="
   -DCYGWIN:BOOL=ON
   -DBUILD_SHARED_LIBS:BOOL=ON
+  -Dlzma:BOOL=ON
 "
 
 BUILD_REQUIRES="\
