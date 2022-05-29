@@ -1,0 +1,9 @@
+category: Libs
+requires: libjpeg-devel liblzma-devel libtiff6 libwebp-devel libzstd-devel pkg-config zlib-devel 
+sdesc: "TIFF image library"
+ldesc: "Included in this software distribution is a library, libtiff, for
+reading and writing TIFF images, a small collection of tools for doing
+simple manipulations of TIFF images on UNIX systems, and documentation
+on the library and tools."
+external-source: tiff
+
