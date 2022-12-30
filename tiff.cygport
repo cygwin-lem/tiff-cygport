@@ -3,7 +3,7 @@ inherit cmake
 
 ################################
 NAME="tiff"
-VERSION=4.4.0
+VERSION=4.5.0
 RELEASE=1
 
 ################################
@@ -13,7 +13,11 @@ DESCRIPTION="Included in this software distribution is a library, libtiff, for
 reading and writing TIFF images, a small collection of tools for doing
 simple manipulations of TIFF images on UNIX systems, and documentation
 on the library and tools."
-HOMEPAGE="http://www.simplesystems.org/libtiff/"
+HOMEPAGE="https://libtiff.gitlab.io/libtiff/"
+
+LICENSE="libtiff"
+# cf. https://www.cygwin.com/packaging-hint-files.html#pvr-src.hint
+#     https://spdx.org/licenses/libtiff.html
 
 ################################
 ## Source from a git repository
@@ -21,6 +25,7 @@ HOMEPAGE="http://www.simplesystems.org/libtiff/"
 GIT_REPO="https://gitlab.com/libtiff/libtiff"
 declare -A GIT_DATEHASH_BY_NAME=(
   # git log --date=iso-strict --format='%cd/%H' -1
+  [4.5.0]=2022-12-13T22:24:39+00:00/v4.5.0
   [4.4.0]=2022-05-20T18:15:09+02:00/v4.4.0
   [4.3.0]=2021-04-16T12:54:59+02:00/v4.3.0
   [4.2.0]=2020-12-19T12:44:58-06:00/v4.2.0
@@ -44,8 +49,8 @@ PATCH_URI=$(\
   | sort \
 )
 PATCH_URI+="\
-  3.9.2-cygwin.patch
-  3.9.7-binmode.patch
+  4.5.0-cygwin.patch
+  4.5.0-binmode.patch
   3.9.7-exeext.patch
   4.3.0-so_major-cygwin.patch
 "
@@ -78,7 +83,15 @@ BUILD_REQUIRES="\
   libGL-devel\
   libGLU-devel\
   libglut-devel\
+\
+  python39-sphinx\
+  python39-sphinxcontrib-applehelp\
+  python39-sphinxcontrib-devhelp\
+  python39-sphinxcontrib-htmlhelp\
+  python39-sphinxcontrib-qthelp\
+  python39-alabaster\
 "
+# Note: sphinx-build is necessary for manual pages and HTML manual
 
 ################################
 ## ABI for libtiff
@@ -86,17 +99,17 @@ ABI=6
 
 ################################
 ## Packages
-PKG_NAMES="tiff libtiff6 libtiff-devel tiff-doc tiff-opengl"
+PKG_NAMES="tiff libtiff7 libtiff-devel tiff-doc tiff-opengl"
 tiff_CONTENTS='--exclude=html --exclude=tiffgt.* usr/bin/*.exe usr/share/doc/ usr/share/man/man1/'
-libtiff6_CATEGORY="Libs"
-libtiff6_SUMMARY="TIFF image library"
-libtiff6_CONTENTS="usr/bin/cygtiff*-6.dll"
+libtiff7_CATEGORY="Libs"
+libtiff7_SUMMARY="TIFF image library"
+libtiff7_CONTENTS="usr/bin/cygtiff*-7.dll"
 libtiff_devel_CATEGORY="Libs"
 libtiff_devel_SUMMARY="TIFF image library"
 libtiff_devel_CONTENTS='usr/include/ usr/lib/'
 tiff_doc_CATEGORY="Doc"
 tiff_doc_SUMMARY="TIFF image library (documentation)"
-tiff_doc_CONTENTS="usr/share/doc/${NAME}/html/ usr/share/man/man3/"
+tiff_doc_CONTENTS="usr/share/doc/${NAME}/manual/html/ usr/share/man/man3/"
 tiff_opengl_SUMMARY="TIFF image viewer"
 tiff_opengl_CONTENTS="usr/bin/tiffgt.exe usr/share/man/man1/tiffgt.*"
 

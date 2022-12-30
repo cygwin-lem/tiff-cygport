@@ -1,0 +1,34 @@
+--- origsrc/libtiff-v4.5.0/libtiff/mkg3states.c
++++ src/libtiff-v4.5.0/libtiff/mkg3states.c
+@@ -229,7 +229,7 @@
+                 return (-1);
+         }
+     outputfile = optind < argc ? argv[optind] : "g3states.h";
+-    fd = fopen(outputfile, "w");
++    fd = fopen(outputfile, "wb");
+     if (fd == NULL)
+     {
+         fprintf(stderr, "%s: %s: Cannot create output file.\n", argv[0],
+--- origsrc/libtiff-v4.5.0/tools/tiff2pdf.c
++++ src/libtiff-v4.5.0/tools/tiff2pdf.c
+@@ -844,6 +844,9 @@
+     {
+         outfilename = "-";
+         t2p->outputfile = stdout;
++#if defined(HAVE_SETMODE) && defined(O_BINARY)
++        setmode(fileno(stdout), O_BINARY);
++#endif
+     }
+ 
+     output = TIFFClientOpen(outfilename, "w", (thandle_t)t2p, t2p_readproc,
+--- origsrc/libtiff-v4.5.0/tools/tiff2ps.c
++++ src/libtiff-v4.5.0/tools/tiff2ps.c
+@@ -351,7 +351,7 @@
+                 }
+                 break;
+             case 'O': /* XXX too bad -o is already taken */
+-                output = fopen(optarg, "w");
++                output = fopen(optarg, "wb");
+                 if (output == NULL)
+                 {
+                     fprintf(stderr, "%s: %s: Cannot open output file.\n",
