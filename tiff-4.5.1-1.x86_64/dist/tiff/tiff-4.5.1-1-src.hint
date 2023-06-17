@@ -1,0 +1,11 @@
+category: Graphics
+build-depends: cygport pkg-config cmake ninja libjpeg-devel libpng-devel libjbig-devel zlib-devel libdeflate-devel libwebp-devel liblzma-devel libzstd-devel libGL-devel libGLU-devel libglut-devel python39-sphinx python39-sphinxcontrib-applehelp python39-sphinxcontrib-devhelp python39-sphinxcontrib-htmlhelp python39-sphinxcontrib-qthelp python39-alabaster
+sdesc: "TIFF image utilities"
+ldesc: "Included in this software distribution is a library, libtiff, for
+reading and writing TIFF images, a small collection of tools for doing
+simple manipulations of TIFF images on UNIX systems, and documentation
+on the library and tools."
+skip:
+
+homepage: https://libtiff.gitlab.io/libtiff/
+license: libtiff

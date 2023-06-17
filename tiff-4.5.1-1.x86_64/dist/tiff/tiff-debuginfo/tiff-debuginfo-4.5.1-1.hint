@@ -1,0 +1,7 @@
+category: Debug
+requires: cygwin-debuginfo
+external-source: tiff
+sdesc: "Debug info for tiff"
+ldesc: "This package contains files necessary for debugging the
+tiff package with gdb."
+
