@@ -3,7 +3,7 @@ inherit cmake
 
 ################################
 NAME="tiff"
-VERSION=4.5.0
+VERSION=4.5.1
 RELEASE=1
 
 ################################
@@ -25,6 +25,7 @@ LICENSE="libtiff"
 GIT_REPO="https://gitlab.com/libtiff/libtiff"
 declare -A GIT_DATEHASH_BY_NAME=(
   # git log --date=iso-strict --format='%cd/%H' -1
+  [4.5.1]=2023-06-14T16:01:04+00:00/v4.5.1
   [4.5.0]=2022-12-13T22:24:39+00:00/v4.5.0
   [4.4.0]=2022-05-20T18:15:09+02:00/v4.4.0
   [4.3.0]=2021-04-16T12:54:59+02:00/v4.3.0
