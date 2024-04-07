@@ -3,7 +3,7 @@ inherit cmake
 
 ################################
 NAME="tiff"
-VERSION=4.5.1
+VERSION=4.6.0
 RELEASE=1
 
 ################################
@@ -25,6 +25,7 @@ LICENSE="libtiff"
 GIT_REPO="https://gitlab.com/libtiff/libtiff"
 declare -A GIT_DATEHASH_BY_NAME=(
   # git log --date=iso-strict --format='%cd/%H' -1
+  [4.6.0]=2023-09-08T11:12:35+02:00/v4.6.0
   [4.5.1]=2023-06-14T16:01:04+00:00/v4.5.1
   [4.5.0]=2022-12-13T22:24:39+00:00/v4.5.0
   [4.4.0]=2022-05-20T18:15:09+02:00/v4.4.0
@@ -51,7 +52,7 @@ PATCH_URI=$(\
 )
 PATCH_URI+="\
   4.5.0-cygwin.patch
-  4.5.0-binmode.patch
+  4.6.0-binmode.patch
   3.9.7-exeext.patch
   4.3.0-so_major-cygwin.patch
 "
@@ -100,7 +101,14 @@ ABI=6
 
 ################################
 ## Packages
-PKG_NAMES="tiff libtiff7 libtiff-devel tiff-doc tiff-opengl"
+# Note: Removed functionality since libtiff 4.6.0:
+#     fax2ps fax2tiff pal2rgb ppm2tiff raw2tiff rgb2ycbcr thumbnail tiff2bw
+#     tiff2rgba tiffcmp tiffcrop tiffdither tiffgt tiffmedian
+#   cf. https://gitlab.com/libtiff/libtiff/-/releases/v4.6.0#tools-changes
+# Note: Because tiffgt is removed in the upstream,
+#   package tiff-opengl should be empty...
+
+PKG_NAMES="tiff libtiff7 libtiff-devel tiff-doc" # tiff-opengl
 tiff_CONTENTS='--exclude=html --exclude=tiffgt.* usr/bin/*.exe usr/share/doc/ usr/share/man/man1/'
 libtiff7_CATEGORY="Libs"
 libtiff7_SUMMARY="TIFF image library"
@@ -111,8 +119,8 @@ libtiff_devel_CONTENTS='usr/include/ usr/lib/'
 tiff_doc_CATEGORY="Doc"
 tiff_doc_SUMMARY="TIFF image library (documentation)"
 tiff_doc_CONTENTS="usr/share/doc/${NAME}/manual/html/ usr/share/man/man3/"
-tiff_opengl_SUMMARY="TIFF image viewer"
-tiff_opengl_CONTENTS="usr/bin/tiffgt.exe usr/share/man/man1/tiffgt.*"
+# tiff_opengl_SUMMARY="TIFF image viewer"
+# tiff_opengl_CONTENTS="usr/bin/tiffgt.exe usr/share/man/man1/tiffgt.*"
 
 ################################
 ## Test
