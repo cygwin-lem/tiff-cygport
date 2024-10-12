@@ -1,6 +1,6 @@
---- origsrc/libtiff-v4.6.0/libtiff/mkg3states.c	2023-09-08 18:12:35.000000000 +0900
-+++ src/libtiff-v4.6.0/libtiff/mkg3states.c	2024-04-07 22:12:34.511945900 +0900
-@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
+--- origsrc/libtiff-v4.7.0/libtiff/mkg3states.c	2024-09-11 16:41:37.000000000 +0900
++++ src/libtiff-v4.7.0/libtiff/mkg3states.c	2024-10-13 08:55:27.335227600 +0900
+@@ -229,7 +229,7 @@
                  return (-1);
          }
      outputfile = optind < argc ? argv[optind] : "g3states.h";
@@ -9,9 +9,9 @@
      if (fd == NULL)
      {
          fprintf(stderr, "%s: %s: Cannot create output file.\n", argv[0],
---- origsrc/libtiff-v4.6.0/tools/unsupported/tiff2pdf.c	2023-09-08 18:12:35.000000000 +0900
-+++ src/libtiff-v4.6.0/tools/unsupported/tiff2pdf.c	2024-04-07 22:13:48.546055800 +0900
-@@ -844,6 +844,9 @@ int main(int argc, char **argv)
+--- origsrc/libtiff-v4.7.0/tools/tiff2pdf.c	2024-09-11 16:41:37.000000000 +0900
++++ src/libtiff-v4.7.0/tools/tiff2pdf.c	2024-10-13 08:56:17.153429200 +0900
+@@ -877,6 +877,9 @@
      {
          outfilename = "-";
          t2p->outputfile = stdout;
@@ -21,9 +21,9 @@
      }
  
      output = TIFFClientOpen(outfilename, "w", (thandle_t)t2p, t2p_readproc,
---- origsrc/libtiff-v4.6.0/tools/unsupported/tiff2ps.c	2023-09-08 18:12:35.000000000 +0900
-+++ src/libtiff-v4.6.0/tools/unsupported/tiff2ps.c	2024-04-07 22:14:19.363865100 +0900
-@@ -351,7 +351,7 @@ int main(int argc, char *argv[])
+--- origsrc/libtiff-v4.7.0/tools/tiff2ps.c	2024-09-11 16:41:37.000000000 +0900
++++ src/libtiff-v4.7.0/tools/tiff2ps.c	2024-10-13 08:56:17.156429000 +0900
+@@ -351,7 +351,7 @@
                  }
                  break;
              case 'O': /* XXX too bad -o is already taken */
