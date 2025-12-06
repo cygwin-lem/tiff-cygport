@@ -3,7 +3,7 @@ inherit cmake
 
 ################################
 NAME="tiff"
-VERSION=4.7.0
+VERSION=4.7.1
 RELEASE=1
 
 ################################
@@ -25,6 +25,7 @@ LICENSE="libtiff"
 GIT_REPO="https://gitlab.com/libtiff/libtiff"
 declare -A GIT_DATEHASH_BY_NAME=(
   # git log --date=iso-strict --format='%cd/%H' -1
+  [4.7.1]=2025-09-12T11:21:38Z/5fe20d0e9aba49a6a350ed533459d1505203838f/v4.7.1
   [4.7.0]=2024-09-11T07:41:37+00:00/v4.7.0
   [4.6.0]=2023-09-08T11:12:35+02:00/v4.6.0
   [4.5.1]=2023-06-14T16:01:04+00:00/v4.5.1
@@ -35,9 +36,9 @@ declare -A GIT_DATEHASH_BY_NAME=(
   [4.1.0]=2019-11-03T14:15:37-06:00/v4.1.0
 )
 
-REV_HASH="${GIT_DATEHASH_BY_NAME[${VERSION}]#*/}"
-REV_DATE="${GIT_DATEHASH_BY_NAME[${VERSION}]%/*}"
-REV_DATE_SHORT="${GIT_DATEHASH_BY_NAME[${VERSION}]%T*}"
+REV_HASH="${GIT_DATEHASH_BY_NAME[${VERSION}]##*/}"
+REV_DATE="${GIT_DATEHASH_BY_NAME[${VERSION}]%%/*}"
+REV_DATE_SHORT="${REV_DATE%%T*}"
 GIT_BASENAME="${GIT_REPO##*/}"
 #SRC_URI="${GIT_REPO}/archive/${REV_HASH}.tar.gz"   # GitHub
 SRC_URI="${GIT_REPO}/-/archive/${REV_HASH}/${GIT_BASENAME}-${REV_HASH}.tar.bz2" # GitLab
@@ -53,7 +54,6 @@ PATCH_URI=$(\
 )
 
 PATCH_URI+="\
-  3.9.7-exeext.patch
   4.3.0-so_major-cygwin.patch
   4.7.0-cygwin.patch
 "
